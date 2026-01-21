@@ -14,29 +14,32 @@ body,
 
 body {
   margin: 0;
-  font-family: "Courier New", "Lucida Console", monospace;
-  background-color: #c4d392;
-  background-image: linear-gradient(#b7c988 1px, transparent 1px),
-    linear-gradient(90deg, #b7c988 1px, transparent 1px);
+  font-family: "Lucida Console", "Courier New", monospace;
+  background-color: #0b0f0a;
+  background-image: linear-gradient(#1f2a16 1px, transparent 1px),
+    linear-gradient(90deg, #1f2a16 1px, transparent 1px);
   background-size: 14px 14px;
-  color: #2b3a1f;
+  color: #d5e7b6;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
 }
 
 .gridlines {
-  background-image: linear-gradient(rgba(78, 98, 55, 0.25) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(78, 98, 55, 0.25) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(78, 98, 55, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(78, 98, 55, 0.35) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
 .glass {
-  background: #d9e5b0;
+  background: #b9c98c;
   border: 2px solid #4e6237;
   box-shadow: 0 0 0 2px #2b3a1f;
   border-radius: 0 !important;
 }
 
 .pixel-frame {
-  background: #d9e5b0;
+  background: #b9c98c;
   border: 2px solid #4e6237;
   box-shadow: 0 0 0 2px #2b3a1f;
 }
@@ -50,6 +53,7 @@ body {
   font-family: "Courier New", "Lucida Console", monospace;
   letter-spacing: 0.2em;
   text-transform: uppercase;
+  text-shadow: 1px 0 0 #0b0f0a, 0 1px 0 #0b0f0a;
 }
 
 .gb-shadow {
