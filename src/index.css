@@ -20,6 +20,24 @@ body,
   height: 100%;
 }
 
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+:root {
+  --pixel-width: 360;
+  --pixel-height: 640;
+  --pixel-scale: 2;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --pixel-scale: 1;
+  }
+}
+
 body {
   margin: 0;
   font-family: "PressStart2P", "Fixedsys", "Terminal", "MS Gothic",
@@ -32,6 +50,24 @@ body {
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: none;
   font-smooth: never;
+}
+
+.pixel-viewport {
+  width: calc(var(--pixel-width) * var(--pixel-scale) * 1px);
+  height: calc(var(--pixel-height) * var(--pixel-scale) * 1px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+  padding-top: 8px;
+}
+
+.pixel-scale {
+  width: calc(var(--pixel-width) * 1px);
+  height: calc(var(--pixel-height) * 1px);
+  transform: scale(var(--pixel-scale));
+  transform-origin: top center;
+  image-rendering: pixelated;
 }
 
 .gridlines {
