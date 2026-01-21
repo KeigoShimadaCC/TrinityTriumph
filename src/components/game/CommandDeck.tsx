@@ -17,7 +17,6 @@ const moves: Array<{
   { type: "scissors", label: "CHOKI", color: colors.scissors, icon: scissorsIcon },
   { type: "paper", label: "PA", color: colors.paper, icon: paperIcon }
 ];
-];
 
 export const CommandDeck = () => {
   const { chooseMove, phase } = useGameStore();
