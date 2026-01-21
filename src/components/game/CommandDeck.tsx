@@ -7,12 +7,16 @@ import rockIcon from "../../assets/sprites/moves/rock.svg";
 import scissorsIcon from "../../assets/sprites/moves/scissors.svg";
 import paperIcon from "../../assets/sprites/moves/paper.svg";
 
-const moves: Array<{ type: MoveType; label: string; color: string; icon: string }> =
-  [
-    { type: "rock", label: "GU", color: colors.rock, icon: rockIcon },
-    { type: "scissors", label: "CHOKI", color: colors.scissors, icon: scissorsIcon },
-    { type: "paper", label: "PA", color: colors.paper, icon: paperIcon }
-  ];
+const moves: Array<{
+  type: MoveType;
+  label: string;
+  color: string;
+  icon: string;
+}> = [
+  { type: "rock", label: "GU", color: colors.rock, icon: rockIcon },
+  { type: "scissors", label: "CHOKI", color: colors.scissors, icon: scissorsIcon },
+  { type: "paper", label: "PA", color: colors.paper, icon: paperIcon }
+];
 ];
 
 export const CommandDeck = () => {
