@@ -187,3 +187,40 @@ body {
 .triangle-invert {
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 }
+
+.field-wrap {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-header {
+  display: flex;
+  justify-content: center;
+}
+
+.field-map {
+  display: grid;
+  gap: 2px;
+  background: #99ad6c;
+  padding: 6px;
+  border: 2px solid #4e6237;
+  box-shadow: inset 0 0 0 2px #2b3a1f;
+}
+
+.field-cell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #b9c98c;
+  border: 1px solid #4e6237;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.field-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}

@@ -75,11 +75,29 @@ const getEnemy = (index: number) => {
   return enemies[safeIndex];
 };
 
+const getAvailableEnemyIndices = (defeated: string[]) =>
+  enemies
+    .map((enemy, index) => ({ enemy, index }))
+    .filter(({ enemy }) => !defeated.includes(enemy.id))
+    .map(({ index }) => index);
+
+const pickEncounterEnemy = (defeated: string[]) => {
+  const remaining = getAvailableEnemyIndices(defeated);
+  if (remaining.length === 0) return null;
+  const choice = remaining[Math.floor(Math.random() * remaining.length)];
+  return choice ?? null;
+};
+
+const gridSize = 9;
+
 export const useGameStore = create<GameState>((set, get) => ({
+  mode: "field",
   phase: "command",
   playerHP: 100,
   enemyHP: getEnemy(0).baseHP,
   enemyIndex: 0,
+  playerPos: { x: 4, y: 4 },
+  defeatedEnemyIds: [],
   burst: 0,
   burstArmed: false,
   burstUsed: false,
@@ -87,10 +105,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   playerMove: null,
   enemyMove: null,
   telegraph: pickTelegraph(),
-  message: "Choose your command.",
+  message: "Explore the field.",
   chooseMove: (move) => {
     const state = get();
-    if (state.phase !== "command") return;
+    if (state.mode !== "battle" || state.phase !== "command") return;
 
     const enemy = getEnemy(state.enemyIndex);
     const tuning = difficultyTuning[enemy.difficulty];
@@ -164,17 +182,20 @@ export const useGameStore = create<GameState>((set, get) => ({
       setTimeout(() => {
         const resetState = get();
         if (resetState.playerHP === 0 || resetState.enemyHP === 0) {
-          const hasNextEnemy =
-            resetState.enemyIndex < enemies.length - 1 &&
-            resetState.enemyHP === 0;
+          const defeatedEnemy = getEnemy(resetState.enemyIndex);
+          const defeatedEnemyIds =
+            resetState.enemyHP === 0
+              ? Array.from(
+                  new Set([...resetState.defeatedEnemyIds, defeatedEnemy.id])
+                )
+              : resetState.defeatedEnemyIds;
           set({
             phase: "result",
+            defeatedEnemyIds,
             message:
               resetState.playerHP === 0
-                ? "Defeated. Reset?"
-                : hasNextEnemy
-                ? "Opponent down. Advance?"
-                : "Victory. Reset?"
+                ? "Defeated. Reset run?"
+                : "Victory. Return?"
           });
           return;
         }
@@ -191,36 +212,77 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
   toggleBurst: () => {
     const state = get();
-    if (state.burst < 100) return;
+    if (state.mode !== "battle" || state.burst < 100) return;
     set({ burstArmed: !state.burstArmed });
   },
-  advanceEnemy: () => {
+  movePlayer: (dx, dy) => {
     const state = get();
-    const nextIndex = Math.min(state.enemyIndex + 1, enemies.length - 1);
-    const nextEnemy = getEnemy(nextIndex);
+    if (state.mode !== "field") return;
+    const nextX = clamp(state.playerPos.x + dx, 0, gridSize - 1);
+    const nextY = clamp(state.playerPos.y + dy, 0, gridSize - 1);
+    const moved = nextX !== state.playerPos.x || nextY !== state.playerPos.y;
+    if (!moved) return;
+
+    const encounterChance = 0.22;
+    const hasEnemies = getAvailableEnemyIndices(state.defeatedEnemyIds).length > 0;
+    const shouldEncounter = hasEnemies && Math.random() < encounterChance;
+    if (shouldEncounter) {
+      const enemyIndex = pickEncounterEnemy(state.defeatedEnemyIds);
+      const enemy = enemyIndex !== null ? getEnemy(enemyIndex) : null;
+      if (!enemy || enemyIndex === null) {
+        set({
+          playerPos: { x: nextX, y: nextY },
+          message: "The field is quiet."
+        });
+        return;
+      }
+      set({
+        mode: "battle",
+        phase: "command",
+        enemyIndex,
+        enemyHP: enemy.baseHP,
+        playerMove: null,
+        enemyMove: null,
+        lastOutcome: null,
+        burst: 0,
+        burstArmed: false,
+        burstUsed: false,
+        telegraph: pickTelegraph(),
+        message: `Encountered ${enemy.name}!`,
+        playerPos: { x: nextX, y: nextY }
+      });
+      return;
+    }
+
     set({
-      phase: "result",
-      enemyIndex: nextIndex,
-      enemyHP: nextEnemy.baseHP,
-      burst: 0,
-      burstArmed: false,
-      burstUsed: false,
-      lastOutcome: null,
+      playerPos: { x: nextX, y: nextY },
+      message: hasEnemies ? "Exploring..." : "All foes cleared."
+    });
+  },
+  returnToField: () => {
+    const state = get();
+    if (state.mode !== "battle") return;
+    if (state.enemyHP > 0 && state.playerHP > 0) return;
+    if (state.playerHP === 0) return;
+    set({
+      mode: "field",
+      phase: "command",
       playerMove: null,
       enemyMove: null,
-      telegraph: pickTelegraph(),
-      message: "Next opponent locked."
+      lastOutcome: null,
+      burstUsed: false,
+      message: "Back to the field."
     });
-    setTimeout(() => {
-      set({ phase: "command", message: "Choose your command." });
-    }, 400);
   },
   reset: () =>
     set({
+      mode: "field",
       phase: "command",
       playerHP: 100,
       enemyHP: getEnemy(0).baseHP,
       enemyIndex: 0,
+      playerPos: { x: 4, y: 4 },
+      defeatedEnemyIds: [],
       burst: 0,
       burstArmed: false,
       burstUsed: false,
@@ -228,6 +290,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       playerMove: null,
       enemyMove: null,
       telegraph: pickTelegraph(),
-      message: "Choose your command."
+      message: "Explore the field."
     })
 }));

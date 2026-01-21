@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { BattleArea } from "./components/game/BattleArea";
 import { CommandDeck } from "./components/game/CommandDeck";
 import { StatusHud } from "./components/game/StatusHud";
+import { FieldArea } from "./components/game/FieldArea";
 import { Screen } from "./components/layout/Screen";
 import { useGameStore } from "./store/useGameStore";
 import { useSound } from "./hooks/useSound";
 
 const App = () => {
-  const { lastOutcome, burstUsed } = useGameStore();
+  const { lastOutcome, burstUsed, mode } = useGameStore();
   const [shake, setShake] = useState(false);
   const playSound = useSound();
 
@@ -36,14 +37,20 @@ const App = () => {
             <p className="text-[10px] uppercase tracking-[0.6em] text-[#d5e7b6]">
               Cyber Linker Arena
             </p>
-            <h1 className="text-2xl font-semibold tracking-[0.2em] text-[#dfeec2]">
-              TrinityTriumph
-            </h1>
-          </header>
+          <h1 className="text-2xl font-semibold tracking-[0.2em] text-[#dfeec2]">
+            TrinityTriumph
+          </h1>
+        </header>
 
-          <StatusHud />
-          <BattleArea />
-          <CommandDeck />
+          {mode === "field" ? (
+            <FieldArea />
+          ) : (
+            <>
+              <StatusHud />
+              <BattleArea />
+              <CommandDeck />
+            </>
+          )}
         </Screen>
       </div>
     </div>

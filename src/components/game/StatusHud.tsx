@@ -15,10 +15,10 @@ export const StatusHud = () => {
     toggleBurst,
     reset,
     enemyIndex,
-    advanceEnemy
+    returnToField,
+    mode
   } = useGameStore();
   const enemy = enemies[Math.min(enemyIndex, enemies.length - 1)];
-  const hasNextEnemy = enemyIndex < enemies.length - 1;
   const [playerDelayed, setPlayerDelayed] = useState(playerHP);
   const [enemyDelayed, setEnemyDelayed] = useState(enemyHP);
   const enemyMax = enemy?.baseHP ?? 100;
@@ -91,15 +91,15 @@ export const StatusHud = () => {
         />
       </div>
 
-      {(playerHP === 0 || enemyHP === 0) && (
+      {mode === "battle" && (playerHP === 0 || enemyHP === 0) && (
         <div className="flex gap-3">
-          {enemyHP === 0 && hasNextEnemy ? (
-            <Button variant="secondary" onClick={advanceEnemy} className="w-full">
-              Next Opponent
+          {enemyHP === 0 ? (
+            <Button variant="secondary" onClick={returnToField} className="w-full">
+              Return Field
             </Button>
           ) : null}
           <Button variant="ghost" onClick={reset} className="w-full">
-            Reset Match
+            Reset Run
           </Button>
         </div>
       )}

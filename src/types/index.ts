@@ -2,6 +2,8 @@ export type MoveType = "rock" | "scissors" | "paper";
 
 export type Phase = "command" | "battle" | "result";
 
+export type Mode = "field" | "battle";
+
 export type Outcome = "win" | "lose" | "draw";
 
 export type Difficulty = "rookie" | "veteran" | "elite";
@@ -30,10 +32,13 @@ export interface Enemy {
 }
 
 export interface GameState {
+  mode: Mode;
   phase: Phase;
   playerHP: number;
   enemyHP: number;
   enemyIndex: number;
+  playerPos: { x: number; y: number };
+  defeatedEnemyIds: string[];
   burst: number;
   burstArmed: boolean;
   burstUsed: boolean;
@@ -44,6 +49,7 @@ export interface GameState {
   message: string;
   chooseMove: (move: MoveType) => void;
   toggleBurst: () => void;
-  advanceEnemy: () => void;
+  movePlayer: (dx: number, dy: number) => void;
+  returnToField: () => void;
   reset: () => void;
 }
