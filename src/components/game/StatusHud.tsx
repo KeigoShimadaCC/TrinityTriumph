@@ -1,0 +1,108 @@
+import { useEffect, useState } from "react";
+import { useGameStore } from "../../store/useGameStore";
+import { ProgressBar } from "../ui/ProgressBar";
+import { Button } from "../ui/Button";
+import { colors } from "../../config/colors";
+import { enemies } from "../../data/enemies";
+
+export const StatusHud = () => {
+  const {
+    playerHP,
+    enemyHP,
+    burst,
+    burstArmed,
+    telegraph,
+    toggleBurst,
+    reset,
+    enemyIndex,
+    advanceEnemy
+  } = useGameStore();
+  const enemy = enemies[Math.min(enemyIndex, enemies.length - 1)];
+  const hasNextEnemy = enemyIndex < enemies.length - 1;
+  const [playerDelayed, setPlayerDelayed] = useState(playerHP);
+  const [enemyDelayed, setEnemyDelayed] = useState(enemyHP);
+  const enemyMax = enemy?.baseHP ?? 100;
+  const enemyValue = (enemyHP / enemyMax) * 100;
+  const enemyDelayedValue = (enemyDelayed / enemyMax) * 100;
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setPlayerDelayed(playerHP), 200);
+    return () => clearTimeout(timeout);
+  }, [playerHP]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setEnemyDelayed(enemyHP), 200);
+    return () => clearTimeout(timeout);
+  }, [enemyHP]);
+
+  const renderHpBar = (value: number, delayed: number, color: string) => (
+    <div className="relative h-3 w-full overflow-hidden rounded-full bg-white/10">
+      <div
+        className="h-full rounded-full transition-all duration-500"
+        style={{ width: `${delayed}%`, backgroundColor: "#ffffff33" }}
+      />
+      <div
+        className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
+        style={{ width: `${value}%`, backgroundColor: color }}
+      />
+    </div>
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="glass rounded-2xl p-4">
+        <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/60">
+          <span>{enemy?.name ?? "Enemy"} Core</span>
+          <span className="flex items-center gap-2">
+            <span className="text-[10px]">
+              {enemy?.difficulty ?? "rookie"}
+            </span>
+            <span
+              className="h-3 w-3 rounded-full border border-white/40"
+              style={{
+                backgroundColor: telegraph ? colors[telegraph] : "transparent"
+              }}
+            />
+          </span>
+        </div>
+        {enemy?.blurb ? (
+          <p className="mb-3 text-[11px] text-white/50">{enemy.blurb}</p>
+        ) : null}
+        {renderHpBar(enemyValue, enemyDelayedValue, colors.scissors)}
+      </div>
+
+      <div className="glass rounded-2xl p-4">
+        <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/60">
+          <span>Leo Link</span>
+          <Button
+            onClick={toggleBurst}
+            variant={burstArmed ? "secondary" : "ghost"}
+            className="px-3 py-1 text-[10px]"
+          >
+            {burst >= 100 ? "ARM BURST" : "BURST LOCK"}
+          </Button>
+        </div>
+        {renderHpBar(playerHP, playerDelayed, colors.rock)}
+        <ProgressBar
+          value={burst}
+          color={colors.paper}
+          label="Burst Gauge"
+          className="mt-4"
+        />
+      </div>
+
+      {(playerHP === 0 || enemyHP === 0) && (
+        <div className="flex gap-3">
+          {enemyHP === 0 && hasNextEnemy ? (
+            <Button variant="secondary" onClick={advanceEnemy} className="w-full">
+              Next Opponent
+            </Button>
+          ) : null}
+          <Button variant="ghost" onClick={reset} className="w-full">
+            Reset Match
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
