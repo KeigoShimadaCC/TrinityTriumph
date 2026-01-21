@@ -33,9 +33,6 @@ export const CommandDeck = () => {
   return (
     <div className="triangle-deck">
       <div className="triangle-inner">
-        <div className="mb-2 text-[10px] uppercase tracking-[0.3em] text-[#3a4a2a]">
-          Command Deck
-        </div>
         <div className="triangle-buttons">
           {moves.map((move) => (
             <Button
@@ -54,6 +51,9 @@ export const CommandDeck = () => {
               </span>
             </Button>
           ))}
+          <div className="triangle-button triangle-center triangle-invert pixel-text text-[9px] text-[#3a4a2a]">
+            Deck
+          </div>
         </div>
       </div>
     </div>

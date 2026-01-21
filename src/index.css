@@ -142,7 +142,7 @@ body {
 
 .triangle-buttons {
   position: relative;
-  height: 140px;
+  height: 150px;
 }
 
 .triangle-button {
@@ -153,6 +153,9 @@ body {
   align-items: center;
   justify-content: center;
   clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  background: #b9c98c;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
 }
 
 .triangle-top {
@@ -165,11 +168,22 @@ body {
 .triangle-left {
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 2px;
 }
 
 .triangle-right {
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 2px;
+}
+
+.triangle-center {
+  position: absolute;
+  top: 54px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.triangle-invert {
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 }

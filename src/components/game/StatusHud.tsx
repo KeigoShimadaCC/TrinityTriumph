@@ -36,7 +36,7 @@ export const StatusHud = () => {
   }, [enemyHP]);
 
   const renderHpBar = (value: number, delayed: number, color: string) => (
-    <div className="pixel-frame gb-shadow relative h-3 w-full overflow-hidden bg-[#c4d392]">
+    <div className="pixel-frame gb-shadow relative h-2 w-full overflow-hidden bg-[#c4d392]">
       <div
         className="h-full transition-all duration-500"
         style={{ width: `${delayed}%`, backgroundColor: "#9fb673" }}
@@ -49,9 +49,9 @@ export const StatusHud = () => {
   );
 
   return (
-    <div className="space-y-3">
-      <div className="glass p-3">
-        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-[#3a4a2a]">
+    <div className="space-y-2">
+      <div className="glass p-2">
+        <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-[0.25em] text-[#3a4a2a]">
           <span>{enemy?.name ?? "Enemy"} Core</span>
           <span className="flex items-center gap-2">
             <span className="text-[10px] text-[#3a4a2a]">
@@ -66,18 +66,18 @@ export const StatusHud = () => {
           </span>
         </div>
         {enemy?.blurb ? (
-          <p className="mb-2 text-[10px] text-[#3a4a2a]">{enemy.blurb}</p>
+          <p className="mb-1 text-[9px] text-[#3a4a2a]">{enemy.blurb}</p>
         ) : null}
         {renderHpBar(enemyValue, enemyDelayedValue, colors.scissors)}
       </div>
 
-      <div className="glass p-3">
-        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-[#3a4a2a]">
+      <div className="glass p-2">
+        <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-[0.25em] text-[#3a4a2a]">
           <span>Leo Link</span>
           <Button
             onClick={toggleBurst}
             variant={burstArmed ? "secondary" : "ghost"}
-            className="px-3 py-1 text-[10px]"
+            className="px-2 py-1 text-[9px]"
           >
             {burst >= 100 ? "ARM BURST" : "BURST LOCK"}
           </Button>
