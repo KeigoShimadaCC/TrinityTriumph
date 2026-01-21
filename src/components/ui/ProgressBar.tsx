@@ -22,9 +22,9 @@ export const ProgressBar = ({
         <span>{Math.round(value)}%</span>
       </div>
     ) : null}
-    <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
+    <div className="pixel-frame h-3 w-full overflow-hidden bg-white/10">
       <div
-        className={cn("h-full rounded-full", smooth && "transition-all duration-500")}
+        className={cn("h-full", smooth && "transition-all duration-500")}
         style={{ width: `${value}%`, backgroundColor: color }}
       />
     </div>

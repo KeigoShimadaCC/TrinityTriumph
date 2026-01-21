@@ -15,7 +15,7 @@ export const Screen = ({ children, className }: ScreenProps) => (
       className
     )}
   >
-    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80" />
+    <div className="pointer-events-none absolute inset-0 opacity-40" />
     <div className="relative z-10 flex h-full w-full max-w-md flex-col gap-5">
       {children}
     </div>

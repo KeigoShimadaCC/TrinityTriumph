@@ -19,7 +19,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 export const Button = ({ className, variant = "primary", ...props }: ButtonProps) => (
   <button
     className={cn(
-      "rounded-xl px-4 py-2 text-sm font-semibold tracking-wide transition",
+      "pixel-frame px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] transition",
       variantStyles[variant],
       className
     )}

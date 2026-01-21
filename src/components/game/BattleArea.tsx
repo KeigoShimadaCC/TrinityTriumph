@@ -2,6 +2,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "../../store/useGameStore";
 import { MoveType } from "../../types";
 import { colors } from "../../config/colors";
+import { enemies } from "../../data/enemies";
+import kaiSprite from "../../assets/sprites/kai.svg";
+import shiroSprite from "../../assets/sprites/shiro.svg";
+import noctSprite from "../../assets/sprites/noct.svg";
 
 const moveLabels: Record<MoveType, string> = {
   rock: "GU",
@@ -16,17 +20,42 @@ const moveColors: Record<MoveType, string> = {
 };
 
 export const BattleArea = () => {
-  const { phase, playerMove, enemyMove, lastOutcome, message } = useGameStore();
+  const {
+    phase,
+    playerMove,
+    enemyMove,
+    lastOutcome,
+    message,
+    enemyIndex
+  } = useGameStore();
   const isBattle = phase === "battle";
   const isResult = phase === "result";
+  const enemy = enemies[Math.min(enemyIndex, enemies.length - 1)];
+  const enemySpriteMap: Record<string, string> = {
+    kai: kaiSprite,
+    shiro: shiroSprite,
+    noct: noctSprite
+  };
+  const enemySprite = enemy ? enemySpriteMap[enemy.id] : null;
 
   const renderMove = (move: MoveType | null, side: "player" | "enemy") => {
     const label = move ? moveLabels[move] : side === "player" ? "LINK" : "ANIMA";
     const color = move ? moveColors[move] : "#ffffff55";
     return (
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-3">
+        {side === "enemy" && enemySprite ? (
+          <img
+            src={enemySprite}
+            alt={`${enemy?.name ?? "Enemy"} sprite`}
+            className="pixelated h-24 w-24"
+          />
+        ) : (
+          <div className="pixel-frame flex h-20 w-20 items-center justify-center text-[10px] uppercase tracking-[0.2em] text-white/60">
+            Leo
+          </div>
+        )}
         <div
-          className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 text-sm font-bold tracking-[0.2em]"
+          className="pixel-frame flex h-12 w-12 items-center justify-center text-xs font-bold tracking-[0.2em]"
           style={{ borderColor: color, color }}
         >
           {label}
@@ -36,8 +65,7 @@ export const BattleArea = () => {
   };
 
   return (
-    <div className="glass relative flex h-64 flex-col items-center justify-center overflow-hidden rounded-3xl border border-white/10 px-4">
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/10" />
+    <div className="glass relative flex h-72 flex-col items-center justify-center overflow-hidden px-4">
       <div className="relative flex w-full items-center justify-between">
         <motion.div
           animate={{
