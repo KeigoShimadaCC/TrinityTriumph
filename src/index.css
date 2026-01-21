@@ -249,6 +249,54 @@ body {
   gap: 6px;
 }
 
+.field-controls {
+  display: flex;
+  justify-content: center;
+}
+
+.dpad {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.dpad-btn {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  background: #b9c98c;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
+  color: #2b3a1f;
+  font-family: "PressStart2P", "Fixedsys", "Terminal", "MS Gothic",
+    "Lucida Console", "Courier New", monospace;
+  font-size: 9px;
+}
+
+.dpad-up {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dpad-down {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dpad-left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dpad-right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .field-equip {
   display: flex;
   flex-direction: column;

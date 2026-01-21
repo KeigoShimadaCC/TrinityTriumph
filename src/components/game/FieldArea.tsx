@@ -86,7 +86,71 @@ export const FieldArea = () => {
       </div>
       <div className="field-footer">
         <span className="pixel-text text-[9px] text-[#3a4a2a]">{message}</span>
-        <span className="pixel-text text-[8px] text-[#3a4a2a]">ARROWS/WASD</span>
+        <span className="pixel-text text-[8px] text-[#3a4a2a]">TAP D-PAD</span>
+      </div>
+      <div className="field-controls">
+        <div className="dpad">
+          <button
+            className="dpad-btn dpad-up"
+            type="button"
+            onClick={() => {
+              const next = { x: playerPos.x, y: playerPos.y - 1 };
+              if (next.y < 0) {
+                movePlayer(0, 0, false);
+                return;
+              }
+              const tile = getTileAt(next.x, next.y);
+              movePlayer(0, -1, isPassable(tile));
+            }}
+          >
+            UP
+          </button>
+          <button
+            className="dpad-btn dpad-left"
+            type="button"
+            onClick={() => {
+              const next = { x: playerPos.x - 1, y: playerPos.y };
+              if (next.x < 0) {
+                movePlayer(0, 0, false);
+                return;
+              }
+              const tile = getTileAt(next.x, next.y);
+              movePlayer(-1, 0, isPassable(tile));
+            }}
+          >
+            LT
+          </button>
+          <button
+            className="dpad-btn dpad-right"
+            type="button"
+            onClick={() => {
+              const next = { x: playerPos.x + 1, y: playerPos.y };
+              if (next.x >= worldWidth) {
+                movePlayer(0, 0, false);
+                return;
+              }
+              const tile = getTileAt(next.x, next.y);
+              movePlayer(1, 0, isPassable(tile));
+            }}
+          >
+            RT
+          </button>
+          <button
+            className="dpad-btn dpad-down"
+            type="button"
+            onClick={() => {
+              const next = { x: playerPos.x, y: playerPos.y + 1 };
+              if (next.y >= worldHeight) {
+                movePlayer(0, 0, false);
+                return;
+              }
+              const tile = getTileAt(next.x, next.y);
+              movePlayer(0, 1, isPassable(tile));
+            }}
+          >
+            DN
+          </button>
+        </div>
       </div>
       <div className="field-equip">
         <div className="pixel-text text-[8px] text-[#3a4a2a]">
