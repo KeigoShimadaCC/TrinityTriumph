@@ -5,6 +5,7 @@ import { clamp, pickWeighted } from "../utils/rng";
 import { enemies } from "../data/enemies";
 import { items } from "../data/items";
 import { playerCharacter } from "../data/characters";
+import { worldHeight, worldWidth } from "../data/worldMap";
 
 const allMoves: MoveType[] = ["rock", "scissors", "paper"];
 
@@ -131,8 +132,6 @@ const pickEncounterEnemy = (defeated: string[]) => {
   const choice = remaining[Math.floor(Math.random() * remaining.length)];
   return choice ?? null;
 };
-
-const gridSize = 9;
 
 export const useGameStore = create<GameState>((set, get) => ({
   mode: "field",
@@ -285,11 +284,15 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (state.mode !== "battle" || state.burst < 100) return;
     set({ burstArmed: !state.burstArmed });
   },
-  movePlayer: (dx, dy) => {
+  movePlayer: (dx, dy, canMove) => {
     const state = get();
     if (state.mode !== "field") return;
-    const nextX = clamp(state.playerPos.x + dx, 0, gridSize - 1);
-    const nextY = clamp(state.playerPos.y + dy, 0, gridSize - 1);
+    if (!canMove) {
+      set({ message: "Blocked terrain." });
+      return;
+    }
+    const nextX = clamp(state.playerPos.x + dx, 0, worldWidth - 1);
+    const nextY = clamp(state.playerPos.y + dy, 0, worldHeight - 1);
     const moved = nextX !== state.playerPos.x || nextY !== state.playerPos.y;
     if (!moved) return;
 

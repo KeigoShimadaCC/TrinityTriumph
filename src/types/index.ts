@@ -64,7 +64,7 @@ export interface GameState {
   message: string;
   chooseMove: (move: MoveType) => void;
   toggleBurst: () => void;
-  movePlayer: (dx: number, dy: number) => void;
+  movePlayer: (dx: number, dy: number, canMove: boolean) => void;
   returnToField: () => void;
   toggleEquipItem: (itemId: string) => void;
   reset: () => void;

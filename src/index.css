@@ -218,6 +218,31 @@ body {
   justify-content: center;
 }
 
+.tile-g {
+  background: #b9c98c;
+}
+
+.tile-r {
+  background: #9c7b4a;
+}
+
+.tile-w {
+  background: #6fa3c9;
+}
+
+.tile-m {
+  background: #a0a6ab;
+  position: relative;
+}
+
+.tile-m::after {
+  content: "";
+  position: absolute;
+  inset: 18% 18% 12% 18%;
+  background: #6f7478;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
 .field-footer {
   display: flex;
   justify-content: space-between;

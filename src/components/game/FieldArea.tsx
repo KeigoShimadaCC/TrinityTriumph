@@ -2,8 +2,10 @@ import { useEffect, useMemo } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import leoSprite from "../../assets/sprites/leo.svg";
 import { items } from "../../data/items";
+import { getTileAt, isPassable, worldHeight, worldWidth } from "../../data/worldMap";
 
-const gridSize = 9;
+const viewSize = 11;
+const viewRadius = Math.floor(viewSize / 2);
 
 export const FieldArea = () => {
   const { playerPos, movePlayer, message, equippedItemIds, toggleEquipItem } =
@@ -12,49 +14,65 @@ export const FieldArea = () => {
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if (event.repeat) return;
+      const next = { x: playerPos.x, y: playerPos.y };
       switch (event.key) {
         case "ArrowUp":
         case "w":
         case "W":
-          movePlayer(0, -1);
+          next.y -= 1;
           break;
         case "ArrowDown":
         case "s":
         case "S":
-          movePlayer(0, 1);
+          next.y += 1;
           break;
         case "ArrowLeft":
         case "a":
         case "A":
-          movePlayer(-1, 0);
+          next.x -= 1;
           break;
         case "ArrowRight":
         case "d":
         case "D":
-          movePlayer(1, 0);
+          next.x += 1;
           break;
         default:
           break;
       }
+      if (next.x === playerPos.x && next.y === playerPos.y) return;
+      if (next.x < 0 || next.y < 0 || next.x >= worldWidth || next.y >= worldHeight) {
+        movePlayer(0, 0, false);
+        return;
+      }
+      const tile = getTileAt(next.x, next.y);
+      movePlayer(next.x - playerPos.x, next.y - playerPos.y, isPassable(tile));
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [movePlayer]);
+  }, [movePlayer, playerPos.x, playerPos.y]);
 
-  const cells = useMemo(() => Array.from({ length: gridSize * gridSize }), []);
+  const cells = useMemo(() => Array.from({ length: viewSize * viewSize }), []);
+  const originX = playerPos.x - viewRadius;
+  const originY = playerPos.y - viewRadius;
 
   return (
     <div className="glass field-wrap">
       <div className="field-header pixel-text text-[9px] text-[#3a4a2a]">
         Grass Field
       </div>
-      <div className="field-map" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
+      <div className="field-map" style={{ gridTemplateColumns: `repeat(${viewSize}, 1fr)` }}>
         {cells.map((_, index) => {
-          const x = index % gridSize;
-          const y = Math.floor(index / gridSize);
-          const isPlayer = x === playerPos.x && y === playerPos.y;
+          const x = index % viewSize;
+          const y = Math.floor(index / viewSize);
+          const worldX = originX + x;
+          const worldY = originY + y;
+          const tile = getTileAt(worldX, worldY);
+          const isPlayer = x === viewRadius && y === viewRadius;
           return (
-            <div key={`${x}-${y}`} className="field-cell">
+            <div
+              key={`${x}-${y}`}
+              className={`field-cell tile-${tile.toLowerCase()}`}
+            >
               {isPlayer ? (
                 <img
                   src={leoSprite}
