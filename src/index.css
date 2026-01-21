@@ -14,7 +14,8 @@ body,
 
 body {
   margin: 0;
-  font-family: "Lucida Console", "Courier New", monospace;
+  font-family: "Fixedsys", "Terminal", "MS Gothic", "Lucida Console",
+    "Courier New", monospace;
   background-color: #0b0f0a;
   background-image: linear-gradient(#1f2a16 1px, transparent 1px),
     linear-gradient(90deg, #1f2a16 1px, transparent 1px);
@@ -50,7 +51,8 @@ body {
 }
 
 .pixel-text {
-  font-family: "Courier New", "Lucida Console", monospace;
+  font-family: "Fixedsys", "Terminal", "MS Gothic", "Lucida Console",
+    "Courier New", monospace;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   text-shadow: 1px 0 0 #0b0f0a, 0 1px 0 #0b0f0a;
