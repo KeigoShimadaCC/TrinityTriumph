@@ -24,8 +24,8 @@ export const CommandDeck = () => {
   const playSound = useSound();
 
   return (
-    <div className="glass rounded-2xl p-4">
-      <div className="mb-3 text-xs uppercase tracking-[0.3em] text-white/60">
+    <div className="glass p-4">
+      <div className="mb-3 text-xs uppercase tracking-[0.3em] text-[#3a4a2a]">
         Command Deck
       </div>
       <div className="grid grid-cols-3 gap-3">

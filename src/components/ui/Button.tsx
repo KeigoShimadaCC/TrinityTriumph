@@ -9,17 +9,17 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-neon-red text-white shadow-heat hover:brightness-110 active:scale-[0.98]",
+    "bg-[#8aa060] text-[#1f2a16] hover:brightness-105 active:translate-y-[1px]",
   secondary:
-    "bg-neon-cyan text-black shadow-glow hover:brightness-110 active:scale-[0.98]",
+    "bg-[#a7bf74] text-[#1f2a16] hover:brightness-105 active:translate-y-[1px]",
   ghost:
-    "border border-white/30 text-white/80 hover:text-white hover:border-white"
+    "bg-transparent text-[#1f2a16] border-2 border-[#4e6237] hover:bg-[#c4d392]"
 };
 
 export const Button = ({ className, variant = "primary", ...props }: ButtonProps) => (
   <button
     className={cn(
-      "pixel-frame px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] transition",
+      "pixel-frame gb-shadow px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] transition",
       variantStyles[variant],
       className
     )}

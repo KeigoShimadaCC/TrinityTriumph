@@ -126,11 +126,11 @@ export const BattleArea = () => {
             initial={{ scale: 0.3, opacity: 0 }}
             animate={{ scale: 1.2, opacity: 0.8 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 m-auto h-20 w-20 rounded-full border border-white/40"
+            className="absolute inset-0 m-auto h-20 w-20 border-2 border-[#4e6237]"
           />
         ) : null}
       </AnimatePresence>
-      <div className="relative mt-4 text-xs uppercase tracking-[0.4em] text-white/60">
+      <div className="relative mt-4 text-xs uppercase tracking-[0.4em] text-[#3a4a2a]">
         {message}
       </div>
     </div>

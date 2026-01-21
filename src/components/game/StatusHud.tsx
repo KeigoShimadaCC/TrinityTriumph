@@ -36,13 +36,13 @@ export const StatusHud = () => {
   }, [enemyHP]);
 
   const renderHpBar = (value: number, delayed: number, color: string) => (
-    <div className="relative h-3 w-full overflow-hidden rounded-full bg-white/10">
+    <div className="pixel-frame gb-shadow relative h-3 w-full overflow-hidden bg-[#c4d392]">
       <div
-        className="h-full rounded-full transition-all duration-500"
-        style={{ width: `${delayed}%`, backgroundColor: "#ffffff33" }}
+        className="h-full transition-all duration-500"
+        style={{ width: `${delayed}%`, backgroundColor: "#9fb673" }}
       />
       <div
-        className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
+        className="absolute inset-y-0 left-0 transition-all duration-500"
         style={{ width: `${value}%`, backgroundColor: color }}
       />
     </div>
@@ -50,15 +50,15 @@ export const StatusHud = () => {
 
   return (
     <div className="space-y-4">
-      <div className="glass rounded-2xl p-4">
-        <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/60">
+      <div className="glass p-4">
+        <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-[#3a4a2a]">
           <span>{enemy?.name ?? "Enemy"} Core</span>
           <span className="flex items-center gap-2">
-            <span className="text-[10px]">
+            <span className="text-[10px] text-[#3a4a2a]">
               {enemy?.difficulty ?? "rookie"}
             </span>
             <span
-              className="h-3 w-3 rounded-full border border-white/40"
+              className="pixel-frame h-3 w-3"
               style={{
                 backgroundColor: telegraph ? colors[telegraph] : "transparent"
               }}
@@ -66,13 +66,13 @@ export const StatusHud = () => {
           </span>
         </div>
         {enemy?.blurb ? (
-          <p className="mb-3 text-[11px] text-white/50">{enemy.blurb}</p>
+          <p className="mb-3 text-[11px] text-[#3a4a2a]">{enemy.blurb}</p>
         ) : null}
         {renderHpBar(enemyValue, enemyDelayedValue, colors.scissors)}
       </div>
 
-      <div className="glass rounded-2xl p-4">
-        <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/60">
+      <div className="glass p-4">
+        <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-[#3a4a2a]">
           <span>Leo Link</span>
           <Button
             onClick={toggleBurst}
