@@ -10,6 +10,8 @@ export type Difficulty = "rookie" | "veteran" | "elite";
 
 export type StoryTag = "tutorial" | "rival" | "arena" | "boss";
 
+export type ElementStats = Record<MoveType, number>;
+
 export interface Character {
   id: string;
   name: string;
@@ -18,6 +20,8 @@ export interface Character {
   vibe: string;
   baseHP: number;
   description: string;
+  attack: ElementStats;
+  defense: ElementStats;
 }
 
 export interface Enemy {
@@ -29,6 +33,16 @@ export interface Enemy {
   difficulty: Difficulty;
   storyTag: StoryTag;
   blurb: string;
+  attack: ElementStats;
+  defense: ElementStats;
+}
+
+export interface Item {
+  id: string;
+  name: string;
+  description: string;
+  attack?: Partial<ElementStats>;
+  defense?: Partial<ElementStats>;
 }
 
 export interface GameState {
@@ -39,6 +53,7 @@ export interface GameState {
   enemyIndex: number;
   playerPos: { x: number; y: number };
   defeatedEnemyIds: string[];
+  equippedItemIds: string[];
   burst: number;
   burstArmed: boolean;
   burstUsed: boolean;
@@ -51,5 +66,6 @@ export interface GameState {
   toggleBurst: () => void;
   movePlayer: (dx: number, dy: number) => void;
   returnToField: () => void;
+  toggleEquipItem: (itemId: string) => void;
   reset: () => void;
 }

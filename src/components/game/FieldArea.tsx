@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import leoSprite from "../../assets/sprites/leo.svg";
+import { items } from "../../data/items";
 
 const gridSize = 9;
 
 export const FieldArea = () => {
-  const { playerPos, movePlayer, message } = useGameStore();
+  const { playerPos, movePlayer, message, equippedItemIds, toggleEquipItem } =
+    useGameStore();
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
@@ -67,6 +69,27 @@ export const FieldArea = () => {
       <div className="field-footer">
         <span className="pixel-text text-[9px] text-[#3a4a2a]">{message}</span>
         <span className="pixel-text text-[8px] text-[#3a4a2a]">ARROWS/WASD</span>
+      </div>
+      <div className="field-equip">
+        <div className="pixel-text text-[8px] text-[#3a4a2a]">
+          EQUIP ({equippedItemIds.length}/3)
+        </div>
+        <div className="equip-grid">
+          {items.map((item) => {
+            const isEquipped = equippedItemIds.includes(item.id);
+            return (
+              <button
+                key={item.id}
+                className={`equip-item ${isEquipped ? "equip-on" : ""}`}
+                onClick={() => toggleEquipItem(item.id)}
+                type="button"
+              >
+                <span className="pixel-text text-[8px]">{item.name}</span>
+                <span className="text-[8px]">{item.description}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

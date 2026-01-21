@@ -9,7 +9,17 @@ export const enemies: Enemy[] = [
     baseHP: 100,
     difficulty: "rookie",
     storyTag: "rival",
-    blurb: "A fast-thinking rival who cuts through hesitation."
+    blurb: "A fast-thinking rival who cuts through hesitation.",
+    attack: {
+      rock: 5,
+      scissors: 7,
+      paper: 5
+    },
+    defense: {
+      rock: 5,
+      scissors: 6,
+      paper: 4
+    }
   },
   {
     id: "shiro",
@@ -19,7 +29,17 @@ export const enemies: Enemy[] = [
     baseHP: 112,
     difficulty: "veteran",
     storyTag: "arena",
-    blurb: "An arena guardian who fights with steady, punishing rhythm."
+    blurb: "An arena guardian who fights with steady, punishing rhythm.",
+    attack: {
+      rock: 7,
+      scissors: 5,
+      paper: 6
+    },
+    defense: {
+      rock: 7,
+      scissors: 4,
+      paper: 6
+    }
   },
   {
     id: "noct",
@@ -29,6 +49,16 @@ export const enemies: Enemy[] = [
     baseHP: 125,
     difficulty: "elite",
     storyTag: "boss",
-    blurb: "A silent apex Linker whose Anima predicts your intent."
+    blurb: "A silent apex Linker whose Anima predicts your intent.",
+    attack: {
+      rock: 6,
+      scissors: 6,
+      paper: 8
+    },
+    defense: {
+      rock: 6,
+      scissors: 7,
+      paper: 8
+    }
   }
 ];

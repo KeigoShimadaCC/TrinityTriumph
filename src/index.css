@@ -224,3 +224,28 @@ body {
   justify-content: space-between;
   gap: 6px;
 }
+
+.field-equip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.equip-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.equip-item {
+  background: #b9c98c;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
+  padding: 6px;
+  text-align: left;
+  color: #2b3a1f;
+}
+
+.equip-on {
+  background: #d5e7b6;
+}

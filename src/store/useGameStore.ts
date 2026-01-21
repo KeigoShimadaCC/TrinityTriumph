@@ -3,6 +3,8 @@ import { Difficulty, GameState, MoveType } from "../types";
 import { compareMoves } from "../utils/rps";
 import { clamp, pickWeighted } from "../utils/rng";
 import { enemies } from "../data/enemies";
+import { items } from "../data/items";
+import { playerCharacter } from "../data/characters";
 
 const allMoves: MoveType[] = ["rock", "scissors", "paper"];
 
@@ -75,6 +77,48 @@ const getEnemy = (index: number) => {
   return enemies[safeIndex];
 };
 
+const basePlayerAttack = playerCharacter.attack;
+const basePlayerDefense = playerCharacter.defense;
+
+const sumStats = (
+  base: Record<MoveType, number>,
+  bonus: Partial<Record<MoveType, number>> | undefined
+) => ({
+  rock: base.rock + (bonus?.rock ?? 0),
+  scissors: base.scissors + (bonus?.scissors ?? 0),
+  paper: base.paper + (bonus?.paper ?? 0)
+});
+
+const getEquippedItems = (equippedIds: string[]) =>
+  items.filter((item) => equippedIds.includes(item.id));
+
+const getPlayerStats = (equippedIds: string[]) => {
+  const equipped = getEquippedItems(equippedIds);
+  const attackBonus = equipped.reduce<Partial<Record<MoveType, number>>>(
+    (acc, item) => ({
+      rock: (acc.rock ?? 0) + (item.attack?.rock ?? 0),
+      scissors: (acc.scissors ?? 0) + (item.attack?.scissors ?? 0),
+      paper: (acc.paper ?? 0) + (item.attack?.paper ?? 0)
+    }),
+    {}
+  );
+  const defenseBonus = equipped.reduce<Partial<Record<MoveType, number>>>(
+    (acc, item) => ({
+      rock: (acc.rock ?? 0) + (item.defense?.rock ?? 0),
+      scissors: (acc.scissors ?? 0) + (item.defense?.scissors ?? 0),
+      paper: (acc.paper ?? 0) + (item.defense?.paper ?? 0)
+    }),
+    {}
+  );
+  return {
+    attack: sumStats(basePlayerAttack, attackBonus),
+    defense: sumStats(basePlayerDefense, defenseBonus)
+  };
+};
+
+const applyElementModifier = (baseDamage: number, attack: number, defense: number) =>
+  Math.max(1, Math.round(baseDamage + (attack - defense) * 0.6));
+
 const getAvailableEnemyIndices = (defeated: string[]) =>
   enemies
     .map((enemy, index) => ({ enemy, index }))
@@ -98,6 +142,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   enemyIndex: 0,
   playerPos: { x: 4, y: 4 },
   defeatedEnemyIds: [],
+  equippedItemIds: [],
   burst: 0,
   burstArmed: false,
   burstUsed: false,
@@ -127,6 +172,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       const nextState = get();
       const currentEnemy = getEnemy(nextState.enemyIndex);
       const currentTuning = difficultyTuning[currentEnemy.difficulty];
+      const playerStats = getPlayerStats(nextState.equippedItemIds);
       let playerHP = nextState.playerHP;
       let enemyHP = nextState.enemyHP;
       let burst = nextState.burst;
@@ -136,8 +182,15 @@ export const useGameStore = create<GameState>((set, get) => ({
 
       if (outcome === "win") {
         const bonus = burstArmed ? 12 : 0;
+        const playerAttack = playerStats.attack[move];
+        const enemyDefense = currentEnemy.defense[move];
+        const modifiedDamage = applyElementModifier(
+          currentTuning.damageToEnemy + bonus,
+          playerAttack,
+          enemyDefense
+        );
         enemyHP = clamp(
-          enemyHP - (currentTuning.damageToEnemy + bonus),
+          enemyHP - modifiedDamage,
           0,
           currentEnemy.baseHP
         );
@@ -149,20 +202,37 @@ export const useGameStore = create<GameState>((set, get) => ({
           burstUsed = true;
         }
       } else if (outcome === "lose") {
+        const enemyAttack = currentEnemy.attack[enemyMove];
+        const playerDefense = playerStats.defense[enemyMove];
+        const modifiedDamage = applyElementModifier(
+          currentTuning.damageToPlayer,
+          enemyAttack,
+          playerDefense
+        );
         playerHP = clamp(
-          playerHP - currentTuning.damageToPlayer,
+          playerHP - modifiedDamage,
           0,
           100
         );
         burst = clamp(burst + currentTuning.burstLose, 0, 100);
         message = "Impact taken.";
       } else {
-        playerHP = clamp(playerHP - currentTuning.drawDamage, 0, 100);
-        enemyHP = clamp(
-          enemyHP - currentTuning.drawDamage,
-          0,
-          currentEnemy.baseHP
+        const playerAttack = playerStats.attack[move];
+        const enemyDefense = currentEnemy.defense[move];
+        const enemyAttack = currentEnemy.attack[enemyMove];
+        const playerDefense = playerStats.defense[enemyMove];
+        const playerDamage = applyElementModifier(
+          currentTuning.drawDamage,
+          enemyAttack,
+          playerDefense
         );
+        const enemyDamage = applyElementModifier(
+          currentTuning.drawDamage,
+          playerAttack,
+          enemyDefense
+        );
+        playerHP = clamp(playerHP - playerDamage, 0, 100);
+        enemyHP = clamp(enemyHP - enemyDamage, 0, currentEnemy.baseHP);
         burst = clamp(burst + currentTuning.burstDraw, 0, 100);
         message = "PARRY!";
       }
@@ -274,6 +344,26 @@ export const useGameStore = create<GameState>((set, get) => ({
       message: "Back to the field."
     });
   },
+  toggleEquipItem: (itemId) => {
+    const state = get();
+    if (state.mode !== "field") return;
+    const alreadyEquipped = state.equippedItemIds.includes(itemId);
+    if (alreadyEquipped) {
+      set({
+        equippedItemIds: state.equippedItemIds.filter((id) => id !== itemId),
+        message: "Item unequipped."
+      });
+      return;
+    }
+    if (state.equippedItemIds.length >= 3) {
+      set({ message: "Equip limit reached." });
+      return;
+    }
+    set({
+      equippedItemIds: [...state.equippedItemIds, itemId],
+      message: "Item equipped."
+    });
+  },
   reset: () =>
     set({
       mode: "field",
@@ -283,6 +373,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       enemyIndex: 0,
       playerPos: { x: 4, y: 4 },
       defeatedEnemyIds: [],
+      equippedItemIds: [],
       burst: 0,
       burstArmed: false,
       burstUsed: false,

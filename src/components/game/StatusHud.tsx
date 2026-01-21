@@ -16,7 +16,8 @@ export const StatusHud = () => {
     reset,
     enemyIndex,
     returnToField,
-    mode
+    mode,
+    equippedItemIds
   } = useGameStore();
   const enemy = enemies[Math.min(enemyIndex, enemies.length - 1)];
   const [playerDelayed, setPlayerDelayed] = useState(playerHP);
@@ -68,6 +69,10 @@ export const StatusHud = () => {
         {enemy?.blurb ? (
           <p className="mb-1 text-[9px] text-[#3a4a2a]">{enemy.blurb}</p>
         ) : null}
+        <div className="mb-1 text-[8px] text-[#3a4a2a]">
+          ATK {enemy.attack.rock}/{enemy.attack.scissors}/{enemy.attack.paper} | DEF{" "}
+          {enemy.defense.rock}/{enemy.defense.scissors}/{enemy.defense.paper}
+        </div>
         {renderHpBar(enemyValue, enemyDelayedValue, colors.scissors)}
       </div>
 
@@ -87,8 +92,13 @@ export const StatusHud = () => {
           value={burst}
           color={colors.paper}
           label="Burst Gauge"
-          className="mt-4"
+          className="mt-3"
         />
+        {equippedItemIds.length > 0 ? (
+          <div className="mt-2 text-[8px] text-[#3a4a2a]">
+            EQUIP: {equippedItemIds.join(", ")}
+          </div>
+        ) : null}
       </div>
 
       {mode === "battle" && (playerHP === 0 || enemyHP === 0) && (
