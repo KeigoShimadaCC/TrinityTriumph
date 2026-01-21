@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "PressStart2P";
+  src: url("./assets/fonts/PressStart2P-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -14,8 +22,8 @@ body,
 
 body {
   margin: 0;
-  font-family: "Fixedsys", "Terminal", "MS Gothic", "Lucida Console",
-    "Courier New", monospace;
+  font-family: "PressStart2P", "Fixedsys", "Terminal", "MS Gothic",
+    "Lucida Console", "Courier New", monospace;
   background-color: #0b0f0a;
   background-image: linear-gradient(#1f2a16 1px, transparent 1px),
     linear-gradient(90deg, #1f2a16 1px, transparent 1px);
@@ -51,8 +59,8 @@ body {
 }
 
 .pixel-text {
-  font-family: "Fixedsys", "Terminal", "MS Gothic", "Lucida Console",
-    "Courier New", monospace;
+  font-family: "PressStart2P", "Fixedsys", "Terminal", "MS Gothic",
+    "Lucida Console", "Courier New", monospace;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   text-shadow: 1px 0 0 #0b0f0a, 0 1px 0 #0b0f0a;
