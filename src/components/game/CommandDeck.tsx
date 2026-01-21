@@ -32,38 +32,36 @@ export const CommandDeck = () => {
   const burstLabel = burstArmed ? "BURST" : burst >= 100 ? "ARM" : "LOCK";
 
   return (
-    <div className="triangle-deck">
-      <div className="triangle-inner">
-        <div className="triangle-buttons">
-          {moves.map((move) => (
-            <Button
-              key={move.type}
-              onClick={() => {
-                playSound("select");
-                chooseMove(move.type);
-              }}
-              disabled={isLocked}
-              className={`triangle-button triangle-${move.position} text-[9px] tracking-[0.2em] disabled:opacity-50`}
-              style={{ backgroundColor: move.color, color: "#0b0b0b" }}
-            >
-              <span className="flex flex-col items-center gap-1">
-                <img src={move.icon} alt={move.label} className="pixelated h-5 w-5" />
-                <span className="pixel-text text-[9px]">{move.label}</span>
-              </span>
-            </Button>
-          ))}
+    <div className="triforce-wrap">
+      <div className="triforce-pad">
+        {moves.map((move) => (
           <Button
+            key={move.type}
             onClick={() => {
               playSound("select");
-              toggleBurst();
+              chooseMove(move.type);
             }}
-            disabled={burst < 100}
-            className="triangle-button triangle-center triangle-invert text-[9px] tracking-[0.2em] disabled:opacity-50"
-            style={{ backgroundColor: colors.paper, color: "#0b0b0b" }}
+            disabled={isLocked}
+            className={`triforce-btn triforce-${move.position} text-[9px] tracking-[0.2em] disabled:opacity-50`}
+            style={{ backgroundColor: move.color, color: "#0b0b0b" }}
           >
-            <span className="pixel-text text-[9px]">{burstLabel}</span>
+            <span className="flex flex-col items-center gap-1">
+              <img src={move.icon} alt={move.label} className="pixelated h-5 w-5" />
+              <span className="pixel-text text-[9px]">{move.label}</span>
+            </span>
           </Button>
-        </div>
+        ))}
+        <Button
+          onClick={() => {
+            playSound("select");
+            toggleBurst();
+          }}
+          disabled={burst < 100}
+          className="triforce-btn triforce-center text-[9px] tracking-[0.2em] disabled:opacity-50"
+          style={{ backgroundColor: colors.paper, color: "#0b0b0b" }}
+        >
+          <span className="pixel-text text-[9px]">{burstLabel}</span>
+        </Button>
       </div>
     </div>
   );

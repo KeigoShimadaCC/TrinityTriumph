@@ -112,81 +112,6 @@ body {
   box-shadow: 0 0 0 2px #2b3a1f;
 }
 
-.triangle-deck {
-  position: relative;
-  width: 100%;
-  padding-top: 10px;
-}
-
-.triangle-deck::before {
-  content: "";
-  display: block;
-  position: absolute;
-  inset: 0;
-  background: #b9c98c;
-  border: 2px solid #4e6237;
-  box-shadow: 0 0 0 2px #2b3a1f;
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-}
-
-.triangle-inner {
-  position: relative;
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-  padding: 18px 14px 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
-  background: #b9c98c;
-}
-
-.triangle-buttons {
-  position: relative;
-  height: 150px;
-}
-
-.triangle-button {
-  width: 64px;
-  height: 64px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-  background: #b9c98c;
-  border: 2px solid #4e6237;
-  box-shadow: 0 0 0 2px #2b3a1f;
-}
-
-.triangle-top {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.triangle-left {
-  position: absolute;
-  bottom: 0;
-  left: 2px;
-}
-
-.triangle-right {
-  position: absolute;
-  bottom: 0;
-  right: 2px;
-}
-
-.triangle-center {
-  position: absolute;
-  top: 54px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.triangle-invert {
-  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
-}
 
 .field-wrap {
   padding: 10px;
@@ -249,6 +174,13 @@ body {
   gap: 6px;
 }
 
+.field-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
 .field-controls {
   display: flex;
   justify-content: center;
@@ -256,14 +188,14 @@ body {
 
 .dpad {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 120px;
 }
 
 .dpad-btn {
   position: absolute;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   background: #b9c98c;
   border: 2px solid #4e6237;
   box-shadow: 0 0 0 2px #2b3a1f;
@@ -313,9 +245,60 @@ body {
   background: #b9c98c;
   border: 2px solid #4e6237;
   box-shadow: 0 0 0 2px #2b3a1f;
-  padding: 6px;
+  padding: 4px;
   text-align: left;
   color: #2b3a1f;
+}
+
+.triforce-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.triforce-pad {
+  position: relative;
+  width: 160px;
+  height: 150px;
+}
+
+.triforce-btn {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  background: #b9c98c;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
+}
+
+.triforce-top {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.triforce-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.triforce-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.triforce-center {
+  position: absolute;
+  top: 54px;
+  left: 50%;
+  transform: translateX(-50%);
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 }
 
 .equip-on {

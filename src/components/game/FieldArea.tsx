@@ -88,89 +88,91 @@ export const FieldArea = () => {
         <span className="pixel-text text-[9px] text-[#3a4a2a]">{message}</span>
         <span className="pixel-text text-[8px] text-[#3a4a2a]">TAP D-PAD</span>
       </div>
-      <div className="field-controls">
-        <div className="dpad">
-          <button
-            className="dpad-btn dpad-up"
-            type="button"
-            onClick={() => {
-              const next = { x: playerPos.x, y: playerPos.y - 1 };
-              if (next.y < 0) {
-                movePlayer(0, 0, false);
-                return;
-              }
-              const tile = getTileAt(next.x, next.y);
-              movePlayer(0, -1, isPassable(tile));
-            }}
-          >
-            UP
-          </button>
-          <button
-            className="dpad-btn dpad-left"
-            type="button"
-            onClick={() => {
-              const next = { x: playerPos.x - 1, y: playerPos.y };
-              if (next.x < 0) {
-                movePlayer(0, 0, false);
-                return;
-              }
-              const tile = getTileAt(next.x, next.y);
-              movePlayer(-1, 0, isPassable(tile));
-            }}
-          >
-            LT
-          </button>
-          <button
-            className="dpad-btn dpad-right"
-            type="button"
-            onClick={() => {
-              const next = { x: playerPos.x + 1, y: playerPos.y };
-              if (next.x >= worldWidth) {
-                movePlayer(0, 0, false);
-                return;
-              }
-              const tile = getTileAt(next.x, next.y);
-              movePlayer(1, 0, isPassable(tile));
-            }}
-          >
-            RT
-          </button>
-          <button
-            className="dpad-btn dpad-down"
-            type="button"
-            onClick={() => {
-              const next = { x: playerPos.x, y: playerPos.y + 1 };
-              if (next.y >= worldHeight) {
-                movePlayer(0, 0, false);
-                return;
-              }
-              const tile = getTileAt(next.x, next.y);
-              movePlayer(0, 1, isPassable(tile));
-            }}
-          >
-            DN
-          </button>
+      <div className="field-bottom">
+        <div className="field-controls">
+          <div className="dpad">
+            <button
+              className="dpad-btn dpad-up"
+              type="button"
+              onClick={() => {
+                const next = { x: playerPos.x, y: playerPos.y - 1 };
+                if (next.y < 0) {
+                  movePlayer(0, 0, false);
+                  return;
+                }
+                const tile = getTileAt(next.x, next.y);
+                movePlayer(0, -1, isPassable(tile));
+              }}
+            >
+              UP
+            </button>
+            <button
+              className="dpad-btn dpad-left"
+              type="button"
+              onClick={() => {
+                const next = { x: playerPos.x - 1, y: playerPos.y };
+                if (next.x < 0) {
+                  movePlayer(0, 0, false);
+                  return;
+                }
+                const tile = getTileAt(next.x, next.y);
+                movePlayer(-1, 0, isPassable(tile));
+              }}
+            >
+              LT
+            </button>
+            <button
+              className="dpad-btn dpad-right"
+              type="button"
+              onClick={() => {
+                const next = { x: playerPos.x + 1, y: playerPos.y };
+                if (next.x >= worldWidth) {
+                  movePlayer(0, 0, false);
+                  return;
+                }
+                const tile = getTileAt(next.x, next.y);
+                movePlayer(1, 0, isPassable(tile));
+              }}
+            >
+              RT
+            </button>
+            <button
+              className="dpad-btn dpad-down"
+              type="button"
+              onClick={() => {
+                const next = { x: playerPos.x, y: playerPos.y + 1 };
+                if (next.y >= worldHeight) {
+                  movePlayer(0, 0, false);
+                  return;
+                }
+                const tile = getTileAt(next.x, next.y);
+                movePlayer(0, 1, isPassable(tile));
+              }}
+            >
+              DN
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="field-equip">
-        <div className="pixel-text text-[8px] text-[#3a4a2a]">
-          EQUIP ({equippedItemIds.length}/3)
-        </div>
-        <div className="equip-grid">
-          {items.map((item) => {
-            const isEquipped = equippedItemIds.includes(item.id);
-            return (
-              <button
-                key={item.id}
-                className={`equip-item ${isEquipped ? "equip-on" : ""}`}
-                onClick={() => toggleEquipItem(item.id)}
-                type="button"
-              >
-                <span className="pixel-text text-[8px]">{item.name}</span>
-                <span className="text-[8px]">{item.description}</span>
-              </button>
-            );
-          })}
+        <div className="field-equip">
+          <div className="pixel-text text-[8px] text-[#3a4a2a]">
+            EQUIP ({equippedItemIds.length}/3)
+          </div>
+          <div className="equip-grid">
+            {items.map((item) => {
+              const isEquipped = equippedItemIds.includes(item.id);
+              return (
+                <button
+                  key={item.id}
+                  className={`equip-item ${isEquipped ? "equip-on" : ""}`}
+                  onClick={() => toggleEquipItem(item.id)}
+                  type="button"
+                >
+                  <span className="pixel-text text-[8px]">{item.name}</span>
+                  <span className="text-[8px]">{item.description}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
