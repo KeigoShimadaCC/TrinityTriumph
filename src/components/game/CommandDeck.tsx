@@ -3,11 +3,16 @@ import { MoveType } from "../../types";
 import { Button } from "../ui/Button";
 import { colors } from "../../config/colors";
 import { useSound } from "../../hooks/useSound";
+import rockIcon from "../../assets/sprites/moves/rock.svg";
+import scissorsIcon from "../../assets/sprites/moves/scissors.svg";
+import paperIcon from "../../assets/sprites/moves/paper.svg";
 
-const moves: Array<{ type: MoveType; label: string; color: string }> = [
-  { type: "rock", label: "GU", color: colors.rock },
-  { type: "scissors", label: "CHOKI", color: colors.scissors },
-  { type: "paper", label: "PA", color: colors.paper }
+const moves: Array<{ type: MoveType; label: string; color: string; icon: string }> =
+  [
+    { type: "rock", label: "GU", color: colors.rock, icon: rockIcon },
+    { type: "scissors", label: "CHOKI", color: colors.scissors, icon: scissorsIcon },
+    { type: "paper", label: "PA", color: colors.paper, icon: paperIcon }
+  ];
 ];
 
 export const CommandDeck = () => {
@@ -32,7 +37,10 @@ export const CommandDeck = () => {
             className="h-16 text-xs tracking-[0.2em] disabled:opacity-50"
             style={{ backgroundColor: move.color, color: "#0b0b0b" }}
           >
-            {move.label}
+            <span className="flex flex-col items-center gap-1">
+              <img src={move.icon} alt={move.label} className="pixelated h-6 w-6" />
+              <span className="pixel-text text-[10px]">{move.label}</span>
+            </span>
           </Button>
         ))}
       </div>

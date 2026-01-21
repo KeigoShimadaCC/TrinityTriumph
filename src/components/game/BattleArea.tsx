@@ -3,9 +3,14 @@ import { useGameStore } from "../../store/useGameStore";
 import { MoveType } from "../../types";
 import { colors } from "../../config/colors";
 import { enemies } from "../../data/enemies";
+import { playerCharacter } from "../../data/characters";
 import kaiSprite from "../../assets/sprites/kai.svg";
 import shiroSprite from "../../assets/sprites/shiro.svg";
 import noctSprite from "../../assets/sprites/noct.svg";
+import leoSprite from "../../assets/sprites/leo.svg";
+import rockIcon from "../../assets/sprites/moves/rock.svg";
+import scissorsIcon from "../../assets/sprites/moves/scissors.svg";
+import paperIcon from "../../assets/sprites/moves/paper.svg";
 
 const moveLabels: Record<MoveType, string> = {
   rock: "GU",
@@ -17,6 +22,11 @@ const moveColors: Record<MoveType, string> = {
   rock: colors.rock,
   scissors: colors.scissors,
   paper: colors.paper
+};
+const moveIcons: Record<MoveType, string> = {
+  rock: rockIcon,
+  scissors: scissorsIcon,
+  paper: paperIcon
 };
 
 export const BattleArea = () => {
@@ -37,10 +47,14 @@ export const BattleArea = () => {
     noct: noctSprite
   };
   const enemySprite = enemy ? enemySpriteMap[enemy.id] : null;
+  const playerSpriteMap: Record<string, string> = {
+    leo: leoSprite
+  };
+  const playerSprite = playerSpriteMap[playerCharacter.id];
 
   const renderMove = (move: MoveType | null, side: "player" | "enemy") => {
-    const label = move ? moveLabels[move] : side === "player" ? "LINK" : "ANIMA";
     const color = move ? moveColors[move] : "#ffffff55";
+    const icon = move ? moveIcons[move] : null;
     return (
       <div className="flex flex-col items-center gap-3">
         {side === "enemy" && enemySprite ? (
@@ -51,14 +65,33 @@ export const BattleArea = () => {
           />
         ) : (
           <div className="pixel-frame flex h-20 w-20 items-center justify-center text-[10px] uppercase tracking-[0.2em] text-white/60">
-            Leo
+            {side === "player" ? (
+              <img
+                src={playerSprite}
+                alt={`${playerCharacter.name} sprite`}
+                className="pixelated h-16 w-16"
+              />
+            ) : (
+              "Enemy"
+            )}
           </div>
         )}
         <div
-          className="pixel-frame flex h-12 w-12 items-center justify-center text-xs font-bold tracking-[0.2em]"
+          className="pixel-frame flex h-12 w-12 items-center justify-center"
           style={{ borderColor: color, color }}
         >
-          {label}
+          {icon ? (
+            <img
+              src={icon}
+              alt={moveLabels[move]}
+              className="pixelated h-8 w-8"
+            />
+          ) : (
+            <span className="pixel-text text-[10px]">LINK</span>
+          )}
+        </div>
+        <div className="pixel-text text-[10px] text-white/70">
+          {move ? moveLabels[move] : side === "player" ? "LINK" : "ANIMA"}
         </div>
       </div>
     );

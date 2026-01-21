@@ -45,4 +45,10 @@ body {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+.pixel-text {
+  font-family: "Courier New", "Lucida Console", monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
 }
