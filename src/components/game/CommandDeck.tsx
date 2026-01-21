@@ -24,28 +24,30 @@ export const CommandDeck = () => {
   const playSound = useSound();
 
   return (
-    <div className="glass p-4">
-      <div className="mb-3 text-xs uppercase tracking-[0.3em] text-[#3a4a2a]">
-        Command Deck
-      </div>
-      <div className="grid grid-cols-3 gap-3">
-        {moves.map((move) => (
-          <Button
-            key={move.type}
-            onClick={() => {
-              playSound("select");
-              chooseMove(move.type);
-            }}
-            disabled={isLocked}
-            className="h-16 text-xs tracking-[0.2em] disabled:opacity-50"
-            style={{ backgroundColor: move.color, color: "#0b0b0b" }}
-          >
-            <span className="flex flex-col items-center gap-1">
-              <img src={move.icon} alt={move.label} className="pixelated h-6 w-6" />
-              <span className="pixel-text text-[10px]">{move.label}</span>
-            </span>
-          </Button>
-        ))}
+    <div className="triangle-deck">
+      <div className="triangle-inner">
+        <div className="mb-2 text-[10px] uppercase tracking-[0.3em] text-[#3a4a2a]">
+          Command Deck
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {moves.map((move) => (
+            <Button
+              key={move.type}
+              onClick={() => {
+                playSound("select");
+                chooseMove(move.type);
+              }}
+              disabled={isLocked}
+              className="h-12 text-[10px] tracking-[0.2em] disabled:opacity-50"
+              style={{ backgroundColor: move.color, color: "#0b0b0b" }}
+            >
+              <span className="flex flex-col items-center gap-1">
+                <img src={move.icon} alt={move.label} className="pixelated h-5 w-5" />
+                <span className="pixel-text text-[9px]">{move.label}</span>
+              </span>
+            </Button>
+          ))}
+        </div>
       </div>
     </div>
   );

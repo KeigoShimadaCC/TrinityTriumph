@@ -49,9 +49,9 @@ export const StatusHud = () => {
   );
 
   return (
-    <div className="space-y-4">
-      <div className="glass p-4">
-        <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-[#3a4a2a]">
+    <div className="space-y-3">
+      <div className="glass p-3">
+        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-[#3a4a2a]">
           <span>{enemy?.name ?? "Enemy"} Core</span>
           <span className="flex items-center gap-2">
             <span className="text-[10px] text-[#3a4a2a]">
@@ -66,13 +66,13 @@ export const StatusHud = () => {
           </span>
         </div>
         {enemy?.blurb ? (
-          <p className="mb-3 text-[11px] text-[#3a4a2a]">{enemy.blurb}</p>
+          <p className="mb-2 text-[10px] text-[#3a4a2a]">{enemy.blurb}</p>
         ) : null}
         {renderHpBar(enemyValue, enemyDelayedValue, colors.scissors)}
       </div>
 
-      <div className="glass p-4">
-        <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-[#3a4a2a]">
+      <div className="glass p-3">
+        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-[#3a4a2a]">
           <span>Leo Link</span>
           <Button
             onClick={toggleBurst}

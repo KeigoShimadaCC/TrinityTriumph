@@ -98,7 +98,7 @@ export const BattleArea = () => {
   };
 
   return (
-    <div className="glass relative flex h-72 flex-col items-center justify-center overflow-hidden px-4">
+    <div className="glass relative flex h-60 flex-col items-center justify-center overflow-hidden px-3">
       <div className="relative flex w-full items-center justify-between">
         <motion.div
           animate={{
@@ -130,7 +130,7 @@ export const BattleArea = () => {
           />
         ) : null}
       </AnimatePresence>
-      <div className="relative mt-4 text-xs uppercase tracking-[0.4em] text-[#3a4a2a]">
+      <div className="relative mt-3 text-[10px] uppercase tracking-[0.3em] text-[#3a4a2a]">
         {message}
       </div>
     </div>

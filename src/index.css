@@ -111,3 +111,31 @@ body {
   border: 2px solid #4e6237;
   box-shadow: 0 0 0 2px #2b3a1f;
 }
+
+.triangle-deck {
+  position: relative;
+  width: 100%;
+  padding-top: 10px;
+}
+
+.triangle-deck::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: #b9c98c;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.triangle-inner {
+  position: relative;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  padding: 18px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  background: #b9c98c;
+}
