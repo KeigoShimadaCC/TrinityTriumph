@@ -26,9 +26,10 @@ const moves: Array<{
 ];
 
 export const CommandDeck = () => {
-  const { chooseMove, phase } = useGameStore();
+  const { chooseMove, phase, toggleBurst, burst, burstArmed } = useGameStore();
   const isLocked = phase !== "command";
   const playSound = useSound();
+  const burstLabel = burstArmed ? "BURST" : burst >= 100 ? "ARM" : "LOCK";
 
   return (
     <div className="triangle-deck">
@@ -51,9 +52,17 @@ export const CommandDeck = () => {
               </span>
             </Button>
           ))}
-          <div className="triangle-button triangle-center triangle-invert pixel-text text-[9px] text-[#3a4a2a]">
-            Deck
-          </div>
+          <Button
+            onClick={() => {
+              playSound("select");
+              toggleBurst();
+            }}
+            disabled={burst < 100}
+            className="triangle-button triangle-center triangle-invert text-[9px] tracking-[0.2em] disabled:opacity-50"
+            style={{ backgroundColor: colors.paper, color: "#0b0b0b" }}
+          >
+            <span className="pixel-text text-[9px]">{burstLabel}</span>
+          </Button>
         </div>
       </div>
     </div>
