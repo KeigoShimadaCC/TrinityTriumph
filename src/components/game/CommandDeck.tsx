@@ -12,10 +12,17 @@ const moves: Array<{
   label: string;
   color: string;
   icon: string;
+  position: "top" | "left" | "right";
 }> = [
-  { type: "rock", label: "GU", color: colors.rock, icon: rockIcon },
-  { type: "scissors", label: "CHOKI", color: colors.scissors, icon: scissorsIcon },
-  { type: "paper", label: "PA", color: colors.paper, icon: paperIcon }
+  { type: "rock", label: "GU", color: colors.rock, icon: rockIcon, position: "top" },
+  {
+    type: "scissors",
+    label: "CHOKI",
+    color: colors.scissors,
+    icon: scissorsIcon,
+    position: "left"
+  },
+  { type: "paper", label: "PA", color: colors.paper, icon: paperIcon, position: "right" }
 ];
 
 export const CommandDeck = () => {
@@ -29,7 +36,7 @@ export const CommandDeck = () => {
         <div className="mb-2 text-[10px] uppercase tracking-[0.3em] text-[#3a4a2a]">
           Command Deck
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="triangle-buttons">
           {moves.map((move) => (
             <Button
               key={move.type}
@@ -38,7 +45,7 @@ export const CommandDeck = () => {
                 chooseMove(move.type);
               }}
               disabled={isLocked}
-              className="h-12 text-[10px] tracking-[0.2em] disabled:opacity-50"
+              className={`triangle-button triangle-${move.position} text-[9px] tracking-[0.2em] disabled:opacity-50`}
               style={{ backgroundColor: move.color, color: "#0b0b0b" }}
             >
               <span className="flex flex-col items-center gap-1">
