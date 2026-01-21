@@ -202,9 +202,9 @@ body {
 
 .field-map {
   display: grid;
-  gap: 2px;
+  gap: 0;
   background: #99ad6c;
-  padding: 6px;
+  padding: 4px;
   border: 2px solid #4e6237;
   box-shadow: inset 0 0 0 2px #2b3a1f;
 }
@@ -213,7 +213,6 @@ body {
   width: 100%;
   aspect-ratio: 1 / 1;
   background: #b9c98c;
-  border: 1px solid #4e6237;
   display: flex;
   align-items: center;
   justify-content: center;
