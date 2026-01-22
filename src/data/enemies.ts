@@ -2,63 +2,123 @@ import { Enemy } from "../types";
 
 export const enemies: Enemy[] = [
   {
-    id: "kai",
-    name: "Kai",
-    color: "#00f0ff",
-    anima: "Volt Slasher",
-    baseHP: 68,
+    id: "goblin",
+    name: "Goblin Scout",
+    color: "#6cab3b",
+    anima: "Rust Dagger",
+    baseHP: 54,
     difficulty: "rookie",
-    storyTag: "rival",
-    blurb: "A fast-thinking rival who cuts through hesitation.",
-    attack: {
-      rock: 5,
-      scissors: 7,
-      paper: 5
-    },
-    defense: {
-      rock: 5,
-      scissors: 6,
-      paper: 4
-    }
+    storyTag: "tutorial",
+    blurb: "Quick and skittish, but easy to outplay.",
+    attack: { rock: 5, scissors: 6, paper: 4 },
+    defense: { rock: 4, scissors: 5, paper: 4 }
   },
   {
-    id: "shiro",
-    name: "Shiro",
-    color: "#ff7b00",
-    anima: "Neon Ronin",
+    id: "dwarf",
+    name: "Dwarf Guard",
+    color: "#b5651d",
+    anima: "Stone Hammer",
+    baseHP: 70,
+    difficulty: "rookie",
+    storyTag: "arena",
+    blurb: "Sturdy and stubborn, absorbs heavy blows.",
+    attack: { rock: 6, scissors: 4, paper: 5 },
+    defense: { rock: 7, scissors: 6, paper: 5 }
+  },
+  {
+    id: "elf",
+    name: "Elf Blade",
+    color: "#8ad0ff",
+    anima: "Moonsteel",
+    baseHP: 62,
+    difficulty: "rookie",
+    storyTag: "rival",
+    blurb: "Swift duelist with keen counters.",
+    attack: { rock: 5, scissors: 7, paper: 5 },
+    defense: { rock: 5, scissors: 6, paper: 5 }
+  },
+  {
+    id: "rogue",
+    name: "Shadow Rogue",
+    color: "#4f4f56",
+    anima: "Nightfang",
+    baseHP: 60,
+    difficulty: "veteran",
+    storyTag: "arena",
+    blurb: "Strikes fast, fades faster.",
+    attack: { rock: 6, scissors: 7, paper: 6 },
+    defense: { rock: 4, scissors: 5, paper: 4 }
+  },
+  {
+    id: "ranger",
+    name: "Forest Ranger",
+    color: "#6c8b3c",
+    anima: "Whisper Bow",
+    baseHP: 66,
+    difficulty: "veteran",
+    storyTag: "arena",
+    blurb: "Balanced tactics and steady aim.",
+    attack: { rock: 6, scissors: 6, paper: 6 },
+    defense: { rock: 5, scissors: 5, paper: 6 }
+  },
+  {
+    id: "cleric",
+    name: "Sun Cleric",
+    color: "#f0d37a",
+    anima: "Halo Sigil",
+    baseHP: 74,
+    difficulty: "veteran",
+    storyTag: "arena",
+    blurb: "Hard to crack; punishes sloppy hits.",
+    attack: { rock: 5, scissors: 5, paper: 7 },
+    defense: { rock: 7, scissors: 6, paper: 7 }
+  },
+  {
+    id: "orc",
+    name: "Orc Brute",
+    color: "#3f7d3a",
+    anima: "Iron Maul",
     baseHP: 78,
     difficulty: "veteran",
     storyTag: "arena",
-    blurb: "An arena guardian who fights with steady, punishing rhythm.",
-    attack: {
-      rock: 7,
-      scissors: 5,
-      paper: 6
-    },
-    defense: {
-      rock: 7,
-      scissors: 4,
-      paper: 6
-    }
+    blurb: "Raw power with reckless swings.",
+    attack: { rock: 8, scissors: 5, paper: 5 },
+    defense: { rock: 6, scissors: 4, paper: 5 }
   },
   {
-    id: "noct",
-    name: "Noct",
-    color: "#f6ff00",
-    anima: "Void Hydra",
-    baseHP: 90,
+    id: "knight",
+    name: "Iron Knight",
+    color: "#cfd6dd",
+    anima: "Oathblade",
+    baseHP: 82,
     difficulty: "elite",
     storyTag: "boss",
-    blurb: "A silent apex Linker whose Anima predicts your intent.",
-    attack: {
-      rock: 6,
-      scissors: 6,
-      paper: 8
-    },
-    defense: {
-      rock: 6,
-      scissors: 7,
-      paper: 8
-    }
+    blurb: "Armored sentinel, slow but crushing.",
+    attack: { rock: 7, scissors: 6, paper: 6 },
+    defense: { rock: 8, scissors: 7, paper: 7 }
+  },
+  {
+    id: "mage",
+    name: "Arcane Mage",
+    color: "#6e4db8",
+    anima: "Void Spark",
+    baseHP: 68,
+    difficulty: "elite",
+    storyTag: "boss",
+    blurb: "Unpredictable bursts of power.",
+    attack: { rock: 6, scissors: 7, paper: 8 },
+    defense: { rock: 5, scissors: 5, paper: 6 }
+  },
+  {
+    id: "wyvern",
+    name: "Crimson Wyvern",
+    color: "#b24f4f",
+    anima: "Skyfire",
+    baseHP: 88,
+    difficulty: "elite",
+    storyTag: "boss",
+    blurb: "Aerial menace with searing strikes.",
+    attack: { rock: 8, scissors: 7, paper: 8 },
+    defense: { rock: 7, scissors: 6, paper: 7 }
   }
 ];

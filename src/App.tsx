@@ -33,10 +33,10 @@ const App = () => {
     <div className="pixel-viewport">
       <div className="pixel-scale">
         <Screen className={shake ? "animate-shake" : ""}>
-          <header className="space-y-1 text-center">
-            <p className="text-[10px] uppercase tracking-[0.6em] text-[#d5e7b6]">
-              Cyber Linker Arena
-            </p>
+        <header className="space-y-1 text-center">
+          <p className="text-[10px] uppercase tracking-[0.6em] text-[#d5e7b6]">
+            Realm Arena
+          </p>
           <h1 className="text-2xl font-semibold tracking-[0.2em] text-[#dfeec2]">
             TrinityTriumph
           </h1>

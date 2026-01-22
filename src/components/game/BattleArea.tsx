@@ -4,9 +4,16 @@ import { MoveType } from "../../types";
 import { colors } from "../../config/colors";
 import { enemies } from "../../data/enemies";
 import { playerCharacter } from "../../data/characters";
-import kaiSprite from "../../assets/sprites/kai.svg";
-import shiroSprite from "../../assets/sprites/shiro.svg";
-import noctSprite from "../../assets/sprites/noct.svg";
+import elfSprite from "../../assets/sprites/elf.svg";
+import dwarfSprite from "../../assets/sprites/dwarf.svg";
+import orcSprite from "../../assets/sprites/orc.svg";
+import knightSprite from "../../assets/sprites/knight.svg";
+import mageSprite from "../../assets/sprites/mage.svg";
+import rangerSprite from "../../assets/sprites/ranger.svg";
+import clericSprite from "../../assets/sprites/cleric.svg";
+import rogueSprite from "../../assets/sprites/rogue.svg";
+import goblinSprite from "../../assets/sprites/goblin.svg";
+import wyvernSprite from "../../assets/sprites/wyvern.svg";
 import leoSprite from "../../assets/sprites/leo.svg";
 import rockIcon from "../../assets/sprites/moves/rock.svg";
 import scissorsIcon from "../../assets/sprites/moves/scissors.svg";
@@ -42,9 +49,16 @@ export const BattleArea = () => {
   const isResult = phase === "result";
   const enemy = enemies[Math.min(enemyIndex, enemies.length - 1)];
   const enemySpriteMap: Record<string, string> = {
-    kai: kaiSprite,
-    shiro: shiroSprite,
-    noct: noctSprite
+    elf: elfSprite,
+    dwarf: dwarfSprite,
+    orc: orcSprite,
+    knight: knightSprite,
+    mage: mageSprite,
+    ranger: rangerSprite,
+    cleric: clericSprite,
+    rogue: rogueSprite,
+    goblin: goblinSprite,
+    wyvern: wyvernSprite
   };
   const enemySprite = enemy ? enemySpriteMap[enemy.id] : null;
   const playerSpriteMap: Record<string, string> = {
