@@ -57,6 +57,14 @@ export interface GameState {
   playerExpToNext: number;
   playerBonusAttack: ElementStats;
   playerBonusDefense: ElementStats;
+  storyStage: number;
+  storyQuest: string;
+  visitedWorlds: {
+    town: boolean;
+    forest: boolean;
+    harbor: boolean;
+    ruins: boolean;
+  };
   enemyHP: number;
   enemyMaxHP: number;
   enemyScale: number;

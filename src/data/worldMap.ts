@@ -1,4 +1,21 @@
-export type TileType = "G" | "R" | "W" | "M" | "H" | "B" | "F" | "T" | "E" | "N" | "U" | "D" | "C";
+export type TileType =
+  | "G"
+  | "R"
+  | "W"
+  | "M"
+  | "H"
+  | "B"
+  | "F"
+  | "T"
+  | "E"
+  | "N"
+  | "U"
+  | "D"
+  | "C"
+  | "P"
+  | "I"
+  | "L"
+  | "Q";
 
 export const worldWidth = 36;
 export const worldHeight = 24;
@@ -37,7 +54,8 @@ const createFieldMap = () => {
   for (let y = 6; y <= 20; y += 1) {
     map[y][24] = "W";
   }
-  map[14][24] = "R";
+  map[14][24] = "P";
+  map[10][24] = "P";
 
   for (let y = 2; y <= 7; y += 1) {
     for (let x = 26; x <= 34; x += 1) {
@@ -65,6 +83,11 @@ const createFieldMap = () => {
       map[y][x] = "G";
     }
   }
+  map[6][16] = "N";
+  map[20][26] = "U";
+  map[4][30] = "D";
+  map[12][12] = "I";
+  map[18][30] = "L";
 
   for (let y = 2; y <= 6; y += 1) {
     for (let x = 17; x <= 22; x += 1) {
@@ -97,6 +120,7 @@ const createTownMap = () => {
   map[6][8] = "B";
   map[6][12] = "B";
   map[6][15] = "B";
+  map[5][10] = "I";
   for (let y = 2; y <= 4; y += 1) {
     for (let x = 18; x <= 20; x += 1) {
       map[y][x] = "F";
@@ -167,6 +191,7 @@ const createHarborMap = () => {
   map[8][10] = "B";
   map[9][12] = "B";
   map[9][8] = "B";
+  map[6][14] = "L";
   map[8][18] = "E";
   return map;
 };
@@ -194,6 +219,7 @@ const createRuinsMap = () => {
   map[8][14] = "B";
   map[12][16] = "H";
   map[10][12] = "E";
+  map[5][12] = "Q";
   return map;
 };
 

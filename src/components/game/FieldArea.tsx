@@ -19,8 +19,15 @@ const viewSize = 11;
 const viewRadius = Math.floor(viewSize / 2);
 
 export const FieldArea = () => {
-  const { playerPos, movePlayer, message, equippedItemIds, toggleEquipItem, world } =
-    useGameStore();
+  const {
+    playerPos,
+    movePlayer,
+    message,
+    equippedItemIds,
+    toggleEquipItem,
+    world,
+    storyQuest
+  } = useGameStore();
   const activeMap =
     world === "town"
       ? townMap
@@ -139,6 +146,9 @@ export const FieldArea = () => {
       <div className="field-footer">
         <span className="pixel-text text-[9px] text-[#3a4a2a]">{message}</span>
         <span className="pixel-text text-[8px] text-[#3a4a2a]">TAP D-PAD</span>
+      </div>
+      <div className="field-quest pixel-text text-[8px] text-[#3a4a2a]">
+        QUEST: {storyQuest}
       </div>
       <div className="field-bottom">
         <div className="field-controls">

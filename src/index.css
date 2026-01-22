@@ -295,12 +295,66 @@ body {
   font-size: 9px;
 }
 
+.tile-p {
+  background: #7a5c3b;
+  position: relative;
+}
+
+.tile-p::after {
+  content: "≡";
+  position: absolute;
+  color: #d5e7b6;
+  font-size: 10px;
+}
+
+.tile-i {
+  background: #a0723f;
+  position: relative;
+}
+
+.tile-i::after {
+  content: "I";
+  position: absolute;
+  color: #f5e9c8;
+  font-size: 9px;
+}
+
+.tile-l {
+  background: #3c5f6b;
+  position: relative;
+}
+
+.tile-l::after {
+  content: "L";
+  position: absolute;
+  color: #f5e9c8;
+  font-size: 9px;
+}
+
+.tile-q {
+  background: #4a3f4a;
+  position: relative;
+}
+
+.tile-q::after {
+  content: "Q";
+  position: absolute;
+  color: #f5e9c8;
+  font-size: 9px;
+}
+
 .field-footer {
   display: flex;
   justify-content: space-between;
   gap: 6px;
 }
 
+.field-quest {
+  padding: 2px 4px;
+  background: #b9c98c;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
+}
 .field-bottom {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -178,6 +178,14 @@ export const useGameStore = create<GameState>((set, get) => ({
   playerExpToNext: 100,
   playerBonusAttack: { rock: 0, scissors: 0, paper: 0 },
   playerBonusDefense: { rock: 0, scissors: 0, paper: 0 },
+  storyStage: 0,
+  storyQuest: "Reach the nearby town.",
+  visitedWorlds: {
+    town: false,
+    forest: false,
+    harbor: false,
+    ruins: false
+  },
   enemyHP: getEnemy(0).baseHP,
   enemyMaxHP: getEnemy(0).baseHP,
   enemyScale: 1,
@@ -381,40 +389,76 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (!moved) return;
 
     if (tile === "T" && state.world === "field") {
+      const visitedWorlds = { ...state.visitedWorlds, town: true };
+      const storyStage = state.storyStage < 1 ? 1 : state.storyStage;
+      const storyQuest =
+        state.storyStage < 1
+          ? "Find the hidden forest glade."
+          : state.storyQuest;
       set({
         world: "town",
         playerPos: { x: 11, y: 9 },
         fieldReturnPos: { x: nextX, y: nextY },
+        visitedWorlds,
+        storyStage,
+        storyQuest,
         message: "Entered town."
       });
       return;
     }
 
     if (tile === "N" && state.world === "field") {
+      const visitedWorlds = { ...state.visitedWorlds, forest: true };
+      const storyStage = state.storyStage < 2 ? 2 : state.storyStage;
+      const storyQuest =
+        state.storyStage < 2
+          ? "Reach the harbor on the southern road."
+          : state.storyQuest;
       set({
         world: "forest",
         playerPos: { x: 14, y: 10 },
         fieldReturnPos: { x: nextX, y: nextY },
+        visitedWorlds,
+        storyStage,
+        storyQuest,
         message: "Entered forest glade."
       });
       return;
     }
 
     if (tile === "U" && state.world === "field") {
+      const visitedWorlds = { ...state.visitedWorlds, harbor: true };
+      const storyStage = state.storyStage < 3 ? 3 : state.storyStage;
+      const storyQuest =
+        state.storyStage < 3
+          ? "Enter the dark ruins to the east."
+          : state.storyQuest;
       set({
         world: "harbor",
         playerPos: { x: 12, y: 8 },
         fieldReturnPos: { x: nextX, y: nextY },
+        visitedWorlds,
+        storyStage,
+        storyQuest,
         message: "Arrived at the harbor."
       });
       return;
     }
 
     if (tile === "D" && state.world === "field") {
+      const visitedWorlds = { ...state.visitedWorlds, ruins: true };
+      const storyStage = state.storyStage < 4 ? 4 : state.storyStage;
+      const storyQuest =
+        state.storyStage < 4
+          ? "Defeat the blight spreading from the ruins."
+          : state.storyQuest;
       set({
         world: "ruins",
         playerPos: { x: 12, y: 9 },
         fieldReturnPos: { x: nextX, y: nextY },
+        visitedWorlds,
+        storyStage,
+        storyQuest,
         message: "Entered the dark ruins."
       });
       return;
@@ -532,6 +576,14 @@ export const useGameStore = create<GameState>((set, get) => ({
       playerExpToNext: 100,
       playerBonusAttack: { rock: 0, scissors: 0, paper: 0 },
       playerBonusDefense: { rock: 0, scissors: 0, paper: 0 },
+      storyStage: 0,
+      storyQuest: "Reach the nearby town.",
+      visitedWorlds: {
+        town: false,
+        forest: false,
+        harbor: false,
+        ruins: false
+      },
       enemyHP: getEnemy(0).baseHP,
       enemyMaxHP: getEnemy(0).baseHP,
       enemyScale: 1,
