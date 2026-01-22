@@ -180,6 +180,38 @@ body {
   font-size: 10px;
 }
 
+.tile-b {
+  background: #8b7a65;
+  position: relative;
+}
+
+.tile-b::after {
+  content: "";
+  position: absolute;
+  inset: 15% 20% 35% 20%;
+  background: #6f5f4f;
+}
+
+.tile-b::before {
+  content: "";
+  position: absolute;
+  inset: 4% 15% 50% 15%;
+  background: #5b4b3d;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.tile-f {
+  background: #b9c98c;
+  position: relative;
+}
+
+.tile-f::after {
+  content: "✿";
+  position: absolute;
+  color: #7a3d4f;
+  font-size: 9px;
+}
+
 .field-footer {
   display: flex;
   justify-content: space-between;

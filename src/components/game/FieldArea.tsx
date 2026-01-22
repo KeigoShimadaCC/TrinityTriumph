@@ -3,6 +3,7 @@ import { useGameStore } from "../../store/useGameStore";
 import leoSprite from "../../assets/sprites/leo.svg";
 import { items } from "../../data/items";
 import { getTileAt, isPassable, worldHeight, worldWidth } from "../../data/worldMap";
+import { npcs } from "../../data/npcs";
 
 const viewSize = 11;
 const viewRadius = Math.floor(viewSize / 2);
@@ -41,10 +42,17 @@ export const FieldArea = () => {
       }
       if (next.x === playerPos.x && next.y === playerPos.y) return;
       if (next.x < 0 || next.y < 0 || next.x >= worldWidth || next.y >= worldHeight) {
-        movePlayer(0, 0, false);
+        movePlayer(0, 0, false, undefined, "The path ends here.");
         return;
       }
       const tile = getTileAt(next.x, next.y);
+      const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+      if (npcAtTarget) {
+        const line =
+          npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
+        movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
+        return;
+      }
       movePlayer(
         next.x - playerPos.x,
         next.y - playerPos.y,
@@ -72,6 +80,7 @@ export const FieldArea = () => {
           const worldX = originX + x;
           const worldY = originY + y;
           const tile = getTileAt(worldX, worldY);
+          const npcHere = npcs.find((npc) => npc.x === worldX && npc.y === worldY);
           const isPlayer = x === viewRadius && y === viewRadius;
           return (
             <div
@@ -82,6 +91,12 @@ export const FieldArea = () => {
                 <img
                   src={leoSprite}
                   alt="Player"
+                  className="pixelated h-6 w-6"
+                />
+              ) : npcHere ? (
+                <img
+                  src={npcHere.sprite}
+                  alt={npcHere.name}
                   className="pixelated h-6 w-6"
                 />
               ) : null}
@@ -101,11 +116,18 @@ export const FieldArea = () => {
               type="button"
               onClick={() => {
                 const next = { x: playerPos.x, y: playerPos.y - 1 };
-                if (next.y < 0) {
-                  movePlayer(0, 0, false);
-                  return;
-                }
+              if (next.y < 0) {
+                movePlayer(0, 0, false, undefined, "The path ends here.");
+                return;
+              }
               const tile = getTileAt(next.x, next.y);
+              const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+              if (npcAtTarget) {
+                const line =
+                  npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
+                movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
+                return;
+              }
               movePlayer(0, -1, isPassable(tile), tile);
             }}
           >
@@ -116,11 +138,18 @@ export const FieldArea = () => {
               type="button"
               onClick={() => {
                 const next = { x: playerPos.x - 1, y: playerPos.y };
-                if (next.x < 0) {
-                  movePlayer(0, 0, false);
-                  return;
-                }
+              if (next.x < 0) {
+                movePlayer(0, 0, false, undefined, "The path ends here.");
+                return;
+              }
               const tile = getTileAt(next.x, next.y);
+              const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+              if (npcAtTarget) {
+                const line =
+                  npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
+                movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
+                return;
+              }
               movePlayer(-1, 0, isPassable(tile), tile);
             }}
           >
@@ -131,11 +160,18 @@ export const FieldArea = () => {
               type="button"
               onClick={() => {
                 const next = { x: playerPos.x + 1, y: playerPos.y };
-                if (next.x >= worldWidth) {
-                  movePlayer(0, 0, false);
-                  return;
-                }
+              if (next.x >= worldWidth) {
+                movePlayer(0, 0, false, undefined, "The path ends here.");
+                return;
+              }
               const tile = getTileAt(next.x, next.y);
+              const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+              if (npcAtTarget) {
+                const line =
+                  npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
+                movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
+                return;
+              }
               movePlayer(1, 0, isPassable(tile), tile);
             }}
           >
@@ -146,11 +182,18 @@ export const FieldArea = () => {
               type="button"
               onClick={() => {
                 const next = { x: playerPos.x, y: playerPos.y + 1 };
-                if (next.y >= worldHeight) {
-                  movePlayer(0, 0, false);
-                  return;
-                }
+              if (next.y >= worldHeight) {
+                movePlayer(0, 0, false, undefined, "The path ends here.");
+                return;
+              }
               const tile = getTileAt(next.x, next.y);
+              const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+              if (npcAtTarget) {
+                const line =
+                  npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
+                movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
+                return;
+              }
               movePlayer(0, 1, isPassable(tile), tile);
             }}
           >

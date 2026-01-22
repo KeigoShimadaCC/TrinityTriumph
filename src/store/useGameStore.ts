@@ -332,11 +332,11 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (state.mode !== "battle" || state.burst < 100) return;
     set({ burstArmed: !state.burstArmed });
   },
-  movePlayer: (dx, dy, canMove, tile) => {
+  movePlayer: (dx, dy, canMove, tile, messageOverride) => {
     const state = get();
     if (state.mode !== "field") return;
     if (!canMove) {
-      set({ message: "Blocked terrain." });
+      set({ message: messageOverride ?? "Blocked terrain." });
       return;
     }
     const nextX = clamp(state.playerPos.x + dx, 0, worldWidth - 1);
@@ -387,7 +387,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     set({
       playerPos: { x: nextX, y: nextY },
-      message: hasEnemies ? "Exploring..." : "All foes cleared."
+      message: messageOverride ?? (hasEnemies ? "Exploring..." : "All foes cleared.")
     });
   },
   returnToField: () => {

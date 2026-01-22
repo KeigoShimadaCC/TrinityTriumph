@@ -71,7 +71,13 @@ export interface GameState {
   message: string;
   chooseMove: (move: MoveType) => void;
   toggleBurst: () => void;
-  movePlayer: (dx: number, dy: number, canMove: boolean, tile?: string) => void;
+  movePlayer: (
+    dx: number,
+    dy: number,
+    canMove: boolean,
+    tile?: string,
+    messageOverride?: string
+  ) => void;
   returnToField: () => void;
   toggleEquipItem: (itemId: string) => void;
   reset: () => void;

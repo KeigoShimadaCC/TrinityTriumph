@@ -1,4 +1,4 @@
-export type TileType = "G" | "R" | "W" | "M" | "H";
+export type TileType = "G" | "R" | "W" | "M" | "H" | "B" | "F";
 
 export const worldWidth = 24;
 export const worldHeight = 18;
@@ -19,6 +19,21 @@ const createWorldMap = () => {
   for (let y = 12; y <= 16; y += 1) {
     for (let x = 1; x <= 6; x += 1) {
       map[y][x] = "W";
+    }
+  }
+
+  for (let y = 2; y <= 6; y += 1) {
+    for (let x = 7; x <= 13; x += 1) {
+      map[y][x] = "R";
+    }
+  }
+  map[3][8] = "B";
+  map[3][12] = "B";
+  map[5][8] = "B";
+  map[5][12] = "B";
+  for (let y = 2; y <= 4; y += 1) {
+    for (let x = 14; x <= 16; x += 1) {
+      map[y][x] = "F";
     }
   }
 
@@ -50,4 +65,4 @@ export const getTileAt = (x: number, y: number): TileType => {
   return worldMap[y][x];
 };
 
-export const isPassable = (tile: TileType) => tile !== "W" && tile !== "M";
+export const isPassable = (tile: TileType) => tile !== "W" && tile !== "M" && tile !== "B";
