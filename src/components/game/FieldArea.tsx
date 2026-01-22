@@ -1,7 +1,8 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import leoSprite from "../../assets/sprites/leo.svg";
 import { items } from "../../data/items";
+import { playerCharacter } from "../../data/characters";
 import {
   fieldMap,
   forestMap,
@@ -26,8 +27,15 @@ export const FieldArea = () => {
     equippedItemIds,
     toggleEquipItem,
     world,
-    storyQuest
+    storyQuest,
+    playerHP,
+    playerMaxHP,
+    playerBonusAttack,
+    playerBonusDefense
   } = useGameStore();
+  const [activeMenu, setActiveMenu] = useState<"status" | "equip" | "items" | null>(
+    null
+  );
   const activeMap =
     world === "town"
       ? townMap
@@ -96,6 +104,35 @@ export const FieldArea = () => {
   const cells = useMemo(() => Array.from({ length: viewSize * viewSize }), []);
   const originX = playerPos.x - viewRadius;
   const originY = playerPos.y - viewRadius;
+  const equippedItems = items.filter((item) => equippedItemIds.includes(item.id));
+  const baseAttack = playerCharacter.attack;
+  const baseDefense = playerCharacter.defense;
+  const itemAttack = equippedItems.reduce(
+    (acc, item) => ({
+      rock: acc.rock + (item.attack?.rock ?? 0),
+      scissors: acc.scissors + (item.attack?.scissors ?? 0),
+      paper: acc.paper + (item.attack?.paper ?? 0)
+    }),
+    { rock: 0, scissors: 0, paper: 0 }
+  );
+  const itemDefense = equippedItems.reduce(
+    (acc, item) => ({
+      rock: acc.rock + (item.defense?.rock ?? 0),
+      scissors: acc.scissors + (item.defense?.scissors ?? 0),
+      paper: acc.paper + (item.defense?.paper ?? 0)
+    }),
+    { rock: 0, scissors: 0, paper: 0 }
+  );
+  const totalAttack = {
+    rock: baseAttack.rock + playerBonusAttack.rock + itemAttack.rock,
+    scissors: baseAttack.scissors + playerBonusAttack.scissors + itemAttack.scissors,
+    paper: baseAttack.paper + playerBonusAttack.paper + itemAttack.paper
+  };
+  const totalDefense = {
+    rock: baseDefense.rock + playerBonusDefense.rock + itemDefense.rock,
+    scissors: baseDefense.scissors + playerBonusDefense.scissors + itemDefense.scissors,
+    paper: baseDefense.paper + playerBonusDefense.paper + itemDefense.paper
+  };
 
   return (
     <div className="glass field-wrap">
@@ -251,28 +288,95 @@ export const FieldArea = () => {
             </button>
           </div>
         </div>
-        <div className="field-equip">
-          <div className="pixel-text text-[8px] text-[#3a4a2a]">
-            EQUIP ({equippedItemIds.length}/3)
-          </div>
-          <div className="equip-grid">
-            {items.map((item) => {
-              const isEquipped = equippedItemIds.includes(item.id);
-              return (
-                <button
-                  key={item.id}
-                  className={`equip-item ${isEquipped ? "equip-on" : ""}`}
-                  onClick={() => toggleEquipItem(item.id)}
-                  type="button"
-                >
-                  <span className="pixel-text text-[8px]">{item.name}</span>
-                  <span className="text-[8px]">{item.description}</span>
-                </button>
-              );
-            })}
-          </div>
+        <div className="field-menu">
+          <button
+            type="button"
+            className="menu-button"
+            onClick={() => setActiveMenu("status")}
+          >
+            Status
+          </button>
+          <button
+            type="button"
+            className="menu-button"
+            onClick={() => setActiveMenu("equip")}
+          >
+            Equipment
+          </button>
+          <button
+            type="button"
+            className="menu-button"
+            onClick={() => setActiveMenu("items")}
+          >
+            Items
+          </button>
         </div>
       </div>
+      {activeMenu ? (
+        <div className="field-overlay">
+          <div className="field-overlay-panel">
+            <div className="overlay-header">
+              <span className="pixel-text text-[9px] text-[#3a4a2a]">
+                {activeMenu === "status"
+                  ? "Status"
+                  : activeMenu === "equip"
+                  ? "Equipment"
+                  : "Items"}
+              </span>
+              <button
+                type="button"
+                className="menu-exit"
+                onClick={() => setActiveMenu(null)}
+              >
+                Exit
+              </button>
+            </div>
+            {activeMenu === "status" ? (
+              <div className="overlay-body">
+                <div className="pixel-text text-[9px] text-[#3a4a2a]">
+                  HP {playerHP}/{playerMaxHP}
+                </div>
+                <div className="overlay-row">
+                  ATK {totalAttack.rock}/{totalAttack.scissors}/{totalAttack.paper}
+                </div>
+                <div className="overlay-row">
+                  DEF {totalDefense.rock}/{totalDefense.scissors}/{totalDefense.paper}
+                </div>
+              </div>
+            ) : null}
+            {activeMenu === "equip" ? (
+              <div className="overlay-body">
+                <div className="pixel-text text-[8px] text-[#3a4a2a]">
+                  EQUIP ({equippedItemIds.length}/3)
+                </div>
+                <div className="equip-grid">
+                  {items.map((item) => {
+                    const isEquipped = equippedItemIds.includes(item.id);
+                    return (
+                      <button
+                        key={item.id}
+                        className={`equip-item ${isEquipped ? "equip-on" : ""}`}
+                        onClick={() => toggleEquipItem(item.id)}
+                        type="button"
+                      >
+                        <span className="pixel-text text-[8px]">{item.name}</span>
+                        <span className="text-[8px]">{item.description}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+            {activeMenu === "items" ? (
+              <div className="overlay-body">
+                <div className="pixel-text text-[8px] text-[#3a4a2a]">
+                  Bag is empty.
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

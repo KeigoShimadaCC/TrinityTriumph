@@ -129,6 +129,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative;
 }
 
 .field-header {
@@ -367,6 +368,71 @@ body {
   justify-content: center;
 }
 
+.field-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menu-button {
+  background: #b9c98c;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
+  color: #2b3a1f;
+  font-family: "PressStart2P", "Fixedsys", "Terminal", "MS Gothic",
+    "Lucida Console", "Courier New", monospace;
+  font-size: 9px;
+  padding: 6px 4px;
+}
+
+.field-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 8, 5, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.field-overlay-panel {
+  width: 90%;
+  height: 85%;
+  background: #b9c98c;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-exit {
+  background: #a0723f;
+  border: 2px solid #4e6237;
+  box-shadow: 0 0 0 2px #2b3a1f;
+  font-family: "PressStart2P", "Fixedsys", "Terminal", "MS Gothic",
+    "Lucida Console", "Courier New", monospace;
+  font-size: 9px;
+  padding: 4px 6px;
+}
+
+.overlay-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.overlay-row {
+  font-size: 9px;
+  color: #2b3a1f;
+}
 .dpad {
   position: relative;
   width: 120px;
