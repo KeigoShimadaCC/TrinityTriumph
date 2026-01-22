@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import leoSprite from "../../assets/sprites/leo.svg";
 import { items } from "../../data/items";
@@ -55,55 +55,41 @@ export const FieldArea = () => {
         case "ArrowUp":
         case "w":
         case "W":
-          next.y -= 1;
+          stepMove(0, -1);
           break;
         case "ArrowDown":
         case "s":
         case "S":
-          next.y += 1;
+          stepMove(0, 1);
           break;
         case "ArrowLeft":
         case "a":
         case "A":
-          next.x -= 1;
+          stepMove(-1, 0);
           break;
         case "ArrowRight":
         case "d":
         case "D":
-          next.x += 1;
+          stepMove(1, 0);
           break;
         default:
           break;
       }
-      if (next.x === playerPos.x && next.y === playerPos.y) return;
-      if (next.x < 0 || next.y < 0 || next.x >= worldWidth || next.y >= worldHeight) {
-        movePlayer(0, 0, false, undefined, "The path ends here.");
-        return;
-      }
-      const tile = getTileAt(activeMap, next.x, next.y);
-      const npcAtTarget = npcs.find(
-        (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
-      );
-      if (npcAtTarget) {
-        const line =
-          npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
-        movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
-        return;
-      }
-      movePlayer(
-        next.x - playerPos.x,
-        next.y - playerPos.y,
-        isPassable(tile),
-        tile
-      );
     };
+    const handlePointerUp = () => stopMoveLoop();
     window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [movePlayer, playerPos.x, playerPos.y, activeMap, world]);
+    window.addEventListener("pointerup", handlePointerUp);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      window.removeEventListener("pointerup", handlePointerUp);
+      stopMoveLoop();
+    };
+  }, [activeMap, movePlayer, playerPos.x, playerPos.y, world]);
 
   const cells = useMemo(() => Array.from({ length: viewSize * viewSize }), []);
   const originX = playerPos.x - viewRadius;
   const originY = playerPos.y - viewRadius;
+  const moveTimerRef = useRef<number | null>(null);
   const equippedItems = items.filter((item) => equippedItemIds.includes(item.id));
   const baseAttack = playerCharacter.attack;
   const baseDefense = playerCharacter.defense;
@@ -132,6 +118,41 @@ export const FieldArea = () => {
     rock: baseDefense.rock + playerBonusDefense.rock + itemDefense.rock,
     scissors: baseDefense.scissors + playerBonusDefense.scissors + itemDefense.scissors,
     paper: baseDefense.paper + playerBonusDefense.paper + itemDefense.paper
+  };
+
+  const stepMove = (dx: number, dy: number) => {
+    const next = { x: playerPos.x + dx, y: playerPos.y + dy };
+    if (next.x < 0 || next.y < 0 || next.x >= worldWidth || next.y >= worldHeight) {
+      movePlayer(0, 0, false, undefined, "The path ends here.");
+      return;
+    }
+    const tile = getTileAt(activeMap, next.x, next.y);
+    const npcAtTarget = npcs.find(
+      (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
+    );
+    if (npcAtTarget) {
+      const line = npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
+      movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
+      return;
+    }
+    movePlayer(dx, dy, isPassable(tile), tile);
+  };
+
+  const startMoveLoop = (dx: number, dy: number) => {
+    stepMove(dx, dy);
+    if (moveTimerRef.current) {
+      window.clearInterval(moveTimerRef.current);
+    }
+    moveTimerRef.current = window.setInterval(() => {
+      stepMove(dx, dy);
+    }, 180);
+  };
+
+  const stopMoveLoop = () => {
+    if (moveTimerRef.current) {
+      window.clearInterval(moveTimerRef.current);
+      moveTimerRef.current = null;
+    }
   };
 
   return (
@@ -193,97 +214,41 @@ export const FieldArea = () => {
             <button
               className="dpad-btn dpad-up"
               type="button"
-              onClick={() => {
-                const next = { x: playerPos.x, y: playerPos.y - 1 };
-              if (next.y < 0) {
-                movePlayer(0, 0, false, undefined, "The path ends here.");
-                return;
-              }
-              const tile = getTileAt(activeMap, next.x, next.y);
-              const npcAtTarget = npcs.find(
-                (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
-              );
-              if (npcAtTarget) {
-                const line =
-                  npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
-                movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
-                return;
-              }
-              movePlayer(0, -1, isPassable(tile), tile);
-            }}
-          >
+              onPointerDown={() => startMoveLoop(0, -1)}
+              onPointerUp={stopMoveLoop}
+              onPointerCancel={stopMoveLoop}
+              onPointerLeave={stopMoveLoop}
+            >
               UP
             </button>
             <button
               className="dpad-btn dpad-left"
               type="button"
-              onClick={() => {
-                const next = { x: playerPos.x - 1, y: playerPos.y };
-              if (next.x < 0) {
-                movePlayer(0, 0, false, undefined, "The path ends here.");
-                return;
-              }
-              const tile = getTileAt(activeMap, next.x, next.y);
-              const npcAtTarget = npcs.find(
-                (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
-              );
-              if (npcAtTarget) {
-                const line =
-                  npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
-                movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
-                return;
-              }
-              movePlayer(-1, 0, isPassable(tile), tile);
-            }}
-          >
+              onPointerDown={() => startMoveLoop(-1, 0)}
+              onPointerUp={stopMoveLoop}
+              onPointerCancel={stopMoveLoop}
+              onPointerLeave={stopMoveLoop}
+            >
               LT
             </button>
             <button
               className="dpad-btn dpad-right"
               type="button"
-              onClick={() => {
-                const next = { x: playerPos.x + 1, y: playerPos.y };
-              if (next.x >= worldWidth) {
-                movePlayer(0, 0, false, undefined, "The path ends here.");
-                return;
-              }
-              const tile = getTileAt(activeMap, next.x, next.y);
-              const npcAtTarget = npcs.find(
-                (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
-              );
-              if (npcAtTarget) {
-                const line =
-                  npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
-                movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
-                return;
-              }
-              movePlayer(1, 0, isPassable(tile), tile);
-            }}
-          >
+              onPointerDown={() => startMoveLoop(1, 0)}
+              onPointerUp={stopMoveLoop}
+              onPointerCancel={stopMoveLoop}
+              onPointerLeave={stopMoveLoop}
+            >
               RT
             </button>
             <button
               className="dpad-btn dpad-down"
               type="button"
-              onClick={() => {
-                const next = { x: playerPos.x, y: playerPos.y + 1 };
-              if (next.y >= worldHeight) {
-                movePlayer(0, 0, false, undefined, "The path ends here.");
-                return;
-              }
-              const tile = getTileAt(activeMap, next.x, next.y);
-              const npcAtTarget = npcs.find(
-                (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
-              );
-              if (npcAtTarget) {
-                const line =
-                  npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
-                movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
-                return;
-              }
-              movePlayer(0, 1, isPassable(tile), tile);
-            }}
-          >
+              onPointerDown={() => startMoveLoop(0, 1)}
+              onPointerUp={stopMoveLoop}
+              onPointerCancel={stopMoveLoop}
+              onPointerLeave={stopMoveLoop}
+            >
               DN
             </button>
           </div>
