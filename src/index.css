@@ -257,8 +257,8 @@ body {
 
 .triforce-pad {
   position: relative;
-  --tri-size: 72px;
-  --tri-overlap: 6px;
+  --tri-size: 78px;
+  --tri-overlap: 4px;
   width: calc(var(--tri-size) * 2);
   height: calc(var(--tri-size) * 2);
 }
@@ -270,6 +270,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
   background: #b9c98c;
   border: 2px solid #4e6237;
   box-shadow: 0 0 0 2px #2b3a1f;
@@ -301,19 +302,7 @@ body {
   transform: translateX(-50%);
 }
 
-.tri-top {
-  clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
-}
-
-.tri-left {
-  clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
-}
-
-.tri-right {
-  clip-path: polygon(0% 0%, 0% 100%, 100% 100%);
-}
-
-.tri-center {
+.triforce-invert {
   clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
 }
 

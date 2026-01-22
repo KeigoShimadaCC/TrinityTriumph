@@ -42,7 +42,7 @@ export const CommandDeck = () => {
               chooseMove(move.type);
             }}
             disabled={isLocked}
-            className={`triforce-btn triforce-${move.position} tri-${move.position} text-[9px] tracking-[0.2em] disabled:opacity-50`}
+            className={`triforce-btn triforce-${move.position} text-[9px] tracking-[0.2em] disabled:opacity-50`}
             style={{ backgroundColor: move.color, color: "#0b0b0b" }}
           >
             <span className="flex flex-col items-center gap-1">
@@ -57,7 +57,7 @@ export const CommandDeck = () => {
             toggleBurst();
           }}
           disabled={burst < 100}
-          className="triforce-btn triforce-center tri-center text-[9px] tracking-[0.2em] disabled:opacity-50"
+          className="triforce-btn triforce-center triforce-invert text-[9px] tracking-[0.2em] disabled:opacity-50"
           style={{ backgroundColor: colors.paper, color: "#0b0b0b" }}
         >
           <span className="pixel-text text-[9px]">{burstLabel}</span>
