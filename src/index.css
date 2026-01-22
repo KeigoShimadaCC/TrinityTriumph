@@ -319,11 +319,11 @@ body {
 }
 
 .hud-panel {
-  min-height: 120px;
+  min-height: 88px;
 }
 
 .battle-panel {
-  min-height: 240px;
+  min-height: 176px;
 }
 
 .hud-row {

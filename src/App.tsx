@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BattleArea } from "./components/game/BattleArea";
 import { CommandDeck } from "./components/game/CommandDeck";
-import { StatusHud } from "./components/game/StatusHud";
+import { EnemyHud, PlayerHud } from "./components/game/StatusHud";
 import { FieldArea } from "./components/game/FieldArea";
 import { Screen } from "./components/layout/Screen";
 import { useGameStore } from "./store/useGameStore";
@@ -46,8 +46,9 @@ const App = () => {
             <FieldArea />
           ) : (
             <>
-              <StatusHud />
+              <EnemyHud />
               <BattleArea />
+              <PlayerHud />
               <CommandDeck />
             </>
           )}

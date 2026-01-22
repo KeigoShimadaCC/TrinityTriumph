@@ -4,30 +4,85 @@ import { Button } from "../ui/Button";
 import { colors } from "../../config/colors";
 import { enemies } from "../../data/enemies";
 
-export const StatusHud = () => {
+const renderBar = (value: number, delayed: number, color: string) => (
+  <div className="pixel-frame gb-shadow relative h-2 w-full overflow-hidden bg-[#c4d392]">
+    <div
+      className="h-full transition-all duration-500"
+      style={{ width: `${delayed}%`, backgroundColor: "#9fb673" }}
+    />
+    <div
+      className="absolute inset-y-0 left-0 transition-all duration-500"
+      style={{ width: `${value}%`, backgroundColor: color }}
+    />
+  </div>
+);
+
+const renderRow = (label: string, value: number, delayed: number, color: string) => (
+  <div className="hud-row">
+    <span className="pixel-text text-[8px] text-[#3a4a2a]">{label}</span>
+    {renderBar(value, delayed, color)}
+    <span className="text-[8px] text-[#3a4a2a]">{Math.round(value)}%</span>
+  </div>
+);
+
+export const EnemyHud = () => {
+  const { enemyHP, telegraph, enemyIndex } = useGameStore();
+  const enemy = enemies[Math.min(enemyIndex, enemies.length - 1)];
+  const [enemyDelayed, setEnemyDelayed] = useState(enemyHP);
+  const enemyMax = enemy?.baseHP ?? 100;
+  const enemyValue = (enemyHP / enemyMax) * 100;
+  const enemyDelayedValue = (enemyDelayed / enemyMax) * 100;
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setEnemyDelayed(enemyHP), 200);
+    return () => clearTimeout(timeout);
+  }, [enemyHP]);
+
+  return (
+    <div className="glass hud-panel hud-top p-1">
+      <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-[0.25em] text-[#3a4a2a]">
+        <span>{enemy?.name ?? "Enemy"} Core</span>
+        <span className="flex items-center gap-2">
+          <span className="text-[10px] text-[#3a4a2a]">
+            {enemy?.difficulty ?? "rookie"}
+          </span>
+          <span
+            className="pixel-frame h-3 w-3"
+            style={{
+              backgroundColor: telegraph ? colors[telegraph] : "transparent"
+            }}
+          />
+        </span>
+      </div>
+      {enemy?.blurb ? (
+        <p className="mb-1 text-[9px] text-[#3a4a2a]">{enemy.blurb}</p>
+      ) : null}
+      <div className="mb-1 text-[8px] text-[#3a4a2a]">
+        ATK {enemy.attack.rock}/{enemy.attack.scissors}/{enemy.attack.paper} | DEF{" "}
+        {enemy.defense.rock}/{enemy.defense.scissors}/{enemy.defense.paper}
+      </div>
+      {renderRow("ENEMY HP", enemyValue, enemyDelayedValue, colors.scissors)}
+    </div>
+  );
+};
+
+export const PlayerHud = () => {
   const {
     playerHP,
     playerMaxHP,
     playerLevel,
     playerExp,
     playerExpToNext,
-    enemyHP,
     burst,
     burstArmed,
-    telegraph,
     toggleBurst,
     reset,
-    enemyIndex,
+    enemyHP,
     returnToField,
     mode,
     equippedItemIds
   } = useGameStore();
-  const enemy = enemies[Math.min(enemyIndex, enemies.length - 1)];
   const [playerDelayed, setPlayerDelayed] = useState(playerHP);
-  const [enemyDelayed, setEnemyDelayed] = useState(enemyHP);
-  const enemyMax = enemy?.baseHP ?? 100;
-  const enemyValue = (enemyHP / enemyMax) * 100;
-  const enemyDelayedValue = (enemyDelayed / enemyMax) * 100;
   const playerValue = (playerHP / playerMaxHP) * 100;
   const playerDelayedValue = (playerDelayed / playerMaxHP) * 100;
   const expValue = (playerExp / playerExpToNext) * 100;
@@ -37,60 +92,9 @@ export const StatusHud = () => {
     return () => clearTimeout(timeout);
   }, [playerHP]);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => setEnemyDelayed(enemyHP), 200);
-    return () => clearTimeout(timeout);
-  }, [enemyHP]);
-
-  const renderBar = (value: number, delayed: number, color: string) => (
-    <div className="pixel-frame gb-shadow relative h-2 w-full overflow-hidden bg-[#c4d392]">
-      <div
-        className="h-full transition-all duration-500"
-        style={{ width: `${delayed}%`, backgroundColor: "#9fb673" }}
-      />
-      <div
-        className="absolute inset-y-0 left-0 transition-all duration-500"
-        style={{ width: `${value}%`, backgroundColor: color }}
-      />
-    </div>
-  );
-
-  const renderRow = (label: string, value: number, delayed: number, color: string) => (
-    <div className="hud-row">
-      <span className="pixel-text text-[8px] text-[#3a4a2a]">{label}</span>
-      {renderBar(value, delayed, color)}
-      <span className="text-[8px] text-[#3a4a2a]">{Math.round(value)}%</span>
-    </div>
-  );
-
   return (
-    <div className="space-y-2">
-      <div className="glass hud-panel hud-top p-2">
-        <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-[0.25em] text-[#3a4a2a]">
-          <span>{enemy?.name ?? "Enemy"} Core</span>
-          <span className="flex items-center gap-2">
-            <span className="text-[10px] text-[#3a4a2a]">
-              {enemy?.difficulty ?? "rookie"}
-            </span>
-            <span
-              className="pixel-frame h-3 w-3"
-              style={{
-                backgroundColor: telegraph ? colors[telegraph] : "transparent"
-              }}
-            />
-          </span>
-        </div>
-        {enemy?.blurb ? (
-          <p className="mb-1 text-[9px] text-[#3a4a2a]">{enemy.blurb}</p>
-        ) : null}
-        <div className="mb-1 text-[8px] text-[#3a4a2a]">
-          ATK {enemy.attack.rock}/{enemy.attack.scissors}/{enemy.attack.paper} | DEF{" "}
-          {enemy.defense.rock}/{enemy.defense.scissors}/{enemy.defense.paper}
-        </div>
-        {renderRow("ENEMY HP", enemyValue, enemyDelayedValue, colors.scissors)}
-      </div>
-
-      <div className="glass hud-panel hud-bottom p-2">
+    <>
+      <div className="glass hud-panel hud-bottom p-1">
         <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-[0.25em] text-[#3a4a2a]">
           <span>Leo Link</span>
           <Button
@@ -105,7 +109,7 @@ export const StatusHud = () => {
         {renderRow("BURST", burst, burst, colors.paper)}
         {renderRow(`LV ${playerLevel}`, expValue, expValue, colors.scissors)}
         {equippedItemIds.length > 0 ? (
-          <div className="mt-2 text-[8px] text-[#3a4a2a]">
+          <div className="mt-1 text-[8px] text-[#3a4a2a]">
             EQUIP: {equippedItemIds.join(", ")}
           </div>
         ) : null}
@@ -123,6 +127,6 @@ export const StatusHud = () => {
           </Button>
         </div>
       )}
-    </div>
+    </>
   );
 };
