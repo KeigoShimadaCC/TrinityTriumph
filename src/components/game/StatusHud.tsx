@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
-import { ProgressBar } from "../ui/ProgressBar";
 import { Button } from "../ui/Button";
 import { colors } from "../../config/colors";
 import { enemies } from "../../data/enemies";
@@ -43,7 +42,7 @@ export const StatusHud = () => {
     return () => clearTimeout(timeout);
   }, [enemyHP]);
 
-  const renderHpBar = (value: number, delayed: number, color: string) => (
+  const renderBar = (value: number, delayed: number, color: string) => (
     <div className="pixel-frame gb-shadow relative h-2 w-full overflow-hidden bg-[#c4d392]">
       <div
         className="h-full transition-all duration-500"
@@ -56,9 +55,17 @@ export const StatusHud = () => {
     </div>
   );
 
+  const renderRow = (label: string, value: number, delayed: number, color: string) => (
+    <div className="hud-row">
+      <span className="pixel-text text-[8px] text-[#3a4a2a]">{label}</span>
+      {renderBar(value, delayed, color)}
+      <span className="text-[8px] text-[#3a4a2a]">{Math.round(value)}%</span>
+    </div>
+  );
+
   return (
     <div className="space-y-2">
-      <div className="glass p-2">
+      <div className="glass hud-panel hud-top p-2">
         <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-[0.25em] text-[#3a4a2a]">
           <span>{enemy?.name ?? "Enemy"} Core</span>
           <span className="flex items-center gap-2">
@@ -80,10 +87,10 @@ export const StatusHud = () => {
           ATK {enemy.attack.rock}/{enemy.attack.scissors}/{enemy.attack.paper} | DEF{" "}
           {enemy.defense.rock}/{enemy.defense.scissors}/{enemy.defense.paper}
         </div>
-        {renderHpBar(enemyValue, enemyDelayedValue, colors.scissors)}
+        {renderRow("ENEMY HP", enemyValue, enemyDelayedValue, colors.scissors)}
       </div>
 
-      <div className="glass p-2">
+      <div className="glass hud-panel hud-bottom p-2">
         <div className="mb-1 flex items-center justify-between text-[9px] uppercase tracking-[0.25em] text-[#3a4a2a]">
           <span>Leo Link</span>
           <Button
@@ -94,19 +101,9 @@ export const StatusHud = () => {
             {burst >= 100 ? "ARM BURST" : "BURST LOCK"}
           </Button>
         </div>
-        {renderHpBar(playerValue, playerDelayedValue, colors.rock)}
-        <ProgressBar
-          value={burst}
-          color={colors.paper}
-          label="Burst Gauge"
-          className="mt-3"
-        />
-        <ProgressBar
-          value={expValue}
-          color={colors.scissors}
-          label={`Level ${playerLevel}`}
-          className="mt-2"
-        />
+        {renderRow("HP", playerValue, playerDelayedValue, colors.rock)}
+        {renderRow("BURST", burst, burst, colors.paper)}
+        {renderRow(`LV ${playerLevel}`, expValue, expValue, colors.scissors)}
         {equippedItemIds.length > 0 ? (
           <div className="mt-2 text-[8px] text-[#3a4a2a]">
             EQUIP: {equippedItemIds.join(", ")}

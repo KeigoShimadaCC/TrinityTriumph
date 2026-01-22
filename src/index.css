@@ -318,6 +318,22 @@ body {
   clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
 }
 
+.hud-panel {
+  min-height: 120px;
+}
+
+.battle-panel {
+  min-height: 240px;
+}
+
+.hud-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
 .equip-on {
   background: #d5e7b6;
 }

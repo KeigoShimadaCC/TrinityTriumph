@@ -112,7 +112,7 @@ export const BattleArea = () => {
   };
 
   return (
-    <div className="glass relative flex h-60 flex-col items-center justify-center overflow-hidden px-3">
+    <div className="glass battle-panel relative flex flex-col items-center justify-center overflow-hidden px-3">
       <div className="relative flex w-full items-center justify-between">
         <motion.div
           animate={{
