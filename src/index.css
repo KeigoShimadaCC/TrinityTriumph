@@ -212,6 +212,30 @@ body {
   font-size: 9px;
 }
 
+.tile-t {
+  background: #4a6b3f;
+  position: relative;
+}
+
+.tile-t::after {
+  content: "T";
+  position: absolute;
+  color: #d5e7b6;
+  font-size: 9px;
+}
+
+.tile-e {
+  background: #4a6b3f;
+  position: relative;
+}
+
+.tile-e::after {
+  content: "E";
+  position: absolute;
+  color: #d5e7b6;
+  font-size: 9px;
+}
+
 .field-footer {
   display: flex;
   justify-content: space-between;

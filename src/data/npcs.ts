@@ -3,6 +3,7 @@ export interface Npc {
   name: string;
   x: number;
   y: number;
+  map: "town";
   sprite: string;
   lines: string[];
 }
@@ -18,6 +19,7 @@ export const npcs: Npc[] = [
     name: "Eldra",
     x: 8,
     y: 3,
+    map: "town",
     sprite: npcMage,
     lines: [
       "Magic bends to timing. Read the telegraph.",
@@ -29,6 +31,7 @@ export const npcs: Npc[] = [
     name: "Brannik",
     x: 10,
     y: 5,
+    map: "town",
     sprite: npcSmith,
     lines: [
       "Equip gear in the field. It boosts your element stats.",
@@ -40,6 +43,7 @@ export const npcs: Npc[] = [
     name: "Sora",
     x: 12,
     y: 3,
+    map: "town",
     sprite: npcSage,
     lines: [
       "Healing springs restore you. Seek the blue + tiles.",
@@ -51,6 +55,7 @@ export const npcs: Npc[] = [
     name: "Vell",
     x: 9,
     y: 6,
+    map: "town",
     sprite: npcMerchant,
     lines: [
       "Defeat each foe once to clear the land.",

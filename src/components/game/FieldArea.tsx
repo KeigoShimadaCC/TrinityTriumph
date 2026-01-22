@@ -2,15 +2,23 @@ import { useEffect, useMemo } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import leoSprite from "../../assets/sprites/leo.svg";
 import { items } from "../../data/items";
-import { getTileAt, isPassable, worldHeight, worldWidth } from "../../data/worldMap";
+import {
+  fieldMap,
+  townMap,
+  getTileAt,
+  isPassable,
+  worldHeight,
+  worldWidth
+} from "../../data/worldMap";
 import { npcs } from "../../data/npcs";
 
 const viewSize = 11;
 const viewRadius = Math.floor(viewSize / 2);
 
 export const FieldArea = () => {
-  const { playerPos, movePlayer, message, equippedItemIds, toggleEquipItem } =
+  const { playerPos, movePlayer, message, equippedItemIds, toggleEquipItem, world } =
     useGameStore();
+  const activeMap = world === "town" ? townMap : fieldMap;
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
@@ -45,8 +53,10 @@ export const FieldArea = () => {
         movePlayer(0, 0, false, undefined, "The path ends here.");
         return;
       }
-      const tile = getTileAt(next.x, next.y);
-      const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+      const tile = getTileAt(activeMap, next.x, next.y);
+      const npcAtTarget = npcs.find(
+        (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
+      );
       if (npcAtTarget) {
         const line =
           npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
@@ -62,7 +72,7 @@ export const FieldArea = () => {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [movePlayer, playerPos.x, playerPos.y]);
+  }, [movePlayer, playerPos.x, playerPos.y, activeMap, world]);
 
   const cells = useMemo(() => Array.from({ length: viewSize * viewSize }), []);
   const originX = playerPos.x - viewRadius;
@@ -71,7 +81,7 @@ export const FieldArea = () => {
   return (
     <div className="glass field-wrap">
       <div className="field-header pixel-text text-[9px] text-[#3a4a2a]">
-        Grass Field
+        {world === "town" ? "Town Square" : "Grass Field"}
       </div>
       <div className="field-map" style={{ gridTemplateColumns: `repeat(${viewSize}, 1fr)` }}>
         {cells.map((_, index) => {
@@ -79,8 +89,10 @@ export const FieldArea = () => {
           const y = Math.floor(index / viewSize);
           const worldX = originX + x;
           const worldY = originY + y;
-          const tile = getTileAt(worldX, worldY);
-          const npcHere = npcs.find((npc) => npc.x === worldX && npc.y === worldY);
+          const tile = getTileAt(activeMap, worldX, worldY);
+          const npcHere = npcs.find(
+            (npc) => npc.map === world && npc.x === worldX && npc.y === worldY
+          );
           const isPlayer = x === viewRadius && y === viewRadius;
           return (
             <div
@@ -120,8 +132,10 @@ export const FieldArea = () => {
                 movePlayer(0, 0, false, undefined, "The path ends here.");
                 return;
               }
-              const tile = getTileAt(next.x, next.y);
-              const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+              const tile = getTileAt(activeMap, next.x, next.y);
+              const npcAtTarget = npcs.find(
+                (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
+              );
               if (npcAtTarget) {
                 const line =
                   npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
@@ -142,8 +156,10 @@ export const FieldArea = () => {
                 movePlayer(0, 0, false, undefined, "The path ends here.");
                 return;
               }
-              const tile = getTileAt(next.x, next.y);
-              const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+              const tile = getTileAt(activeMap, next.x, next.y);
+              const npcAtTarget = npcs.find(
+                (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
+              );
               if (npcAtTarget) {
                 const line =
                   npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
@@ -164,8 +180,10 @@ export const FieldArea = () => {
                 movePlayer(0, 0, false, undefined, "The path ends here.");
                 return;
               }
-              const tile = getTileAt(next.x, next.y);
-              const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+              const tile = getTileAt(activeMap, next.x, next.y);
+              const npcAtTarget = npcs.find(
+                (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
+              );
               if (npcAtTarget) {
                 const line =
                   npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
@@ -186,8 +204,10 @@ export const FieldArea = () => {
                 movePlayer(0, 0, false, undefined, "The path ends here.");
                 return;
               }
-              const tile = getTileAt(next.x, next.y);
-              const npcAtTarget = npcs.find((npc) => npc.x === next.x && npc.y === next.y);
+              const tile = getTileAt(activeMap, next.x, next.y);
+              const npcAtTarget = npcs.find(
+                (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
+              );
               if (npcAtTarget) {
                 const line =
                   npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];

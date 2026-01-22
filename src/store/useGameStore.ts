@@ -5,7 +5,7 @@ import { clamp, pickWeighted } from "../utils/rng";
 import { enemies } from "../data/enemies";
 import { items } from "../data/items";
 import { playerCharacter } from "../data/characters";
-import { worldHeight, worldWidth } from "../data/worldMap";
+import { fieldMap, townMap, worldHeight, worldWidth } from "../data/worldMap";
 
 const allMoves: MoveType[] = ["rock", "scissors", "paper"];
 
@@ -139,6 +139,7 @@ const pickEncounterEnemy = (defeated: string[]) => {
 
 export const useGameStore = create<GameState>((set, get) => ({
   mode: "field",
+  world: "field",
   phase: "command",
   playerHP: 100,
   playerMaxHP: 100,
@@ -344,9 +345,28 @@ export const useGameStore = create<GameState>((set, get) => ({
     const moved = nextX !== state.playerPos.x || nextY !== state.playerPos.y;
     if (!moved) return;
 
+    if (tile === "T" && state.world === "field") {
+      set({
+        world: "town",
+        playerPos: { x: 10, y: 8 },
+        message: "Entered town."
+      });
+      return;
+    }
+
+    if (tile === "E" && state.world === "town") {
+      set({
+        world: "field",
+        playerPos: { x: 4, y: 4 },
+        message: "Returned to field."
+      });
+      return;
+    }
+
     const encounterChance = 0.22;
     const hasEnemies = getAvailableEnemyIndices(state.defeatedEnemyIds).length > 0;
-    const shouldEncounter = hasEnemies && Math.random() < encounterChance;
+    const shouldEncounter =
+      state.world === "field" && hasEnemies && Math.random() < encounterChance;
     if (shouldEncounter) {
       const enemyIndex = pickEncounterEnemy(state.defeatedEnemyIds);
       const enemy = enemyIndex !== null ? getEnemy(enemyIndex) : null;
@@ -439,6 +459,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       enemyHP: getEnemy(0).baseHP,
       enemyIndex: 0,
       playerPos: { x: 4, y: 4 },
+      world: "field",
       defeatedEnemyIds: [],
       equippedItemIds: [],
       burst: 0,

@@ -48,6 +48,7 @@ export interface Item {
 
 export interface GameState {
   mode: Mode;
+  world: "field" | "town";
   phase: Phase;
   playerHP: number;
   playerMaxHP: number;
