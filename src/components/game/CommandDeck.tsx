@@ -14,15 +14,15 @@ const moves: Array<{
   icon: string;
   position: "top" | "left" | "right";
 }> = [
-  { type: "rock", label: "GU", color: colors.rock, icon: rockIcon, position: "top" },
+  { type: "rock", label: "SWORD", color: colors.rock, icon: rockIcon, position: "top" },
   {
     type: "scissors",
-    label: "CHOKI",
+    label: "MAGIC",
     color: colors.scissors,
     icon: scissorsIcon,
     position: "left"
   },
-  { type: "paper", label: "PA", color: colors.paper, icon: paperIcon, position: "right" }
+  { type: "paper", label: "PRAYER", color: colors.paper, icon: paperIcon, position: "right" }
 ];
 
 export const CommandDeck = () => {

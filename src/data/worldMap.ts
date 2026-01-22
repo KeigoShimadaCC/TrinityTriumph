@@ -1,4 +1,4 @@
-export type TileType = "G" | "R" | "W" | "M";
+export type TileType = "G" | "R" | "W" | "M" | "H";
 
 export const worldWidth = 24;
 export const worldHeight = 18;
@@ -21,6 +21,10 @@ const createWorldMap = () => {
       map[y][x] = "W";
     }
   }
+
+  map[5][4] = "H";
+  map[14][18] = "H";
+  map[10][9] = "H";
 
   for (let y = 2; y <= 6; y += 1) {
     for (let x = 17; x <= 22; x += 1) {

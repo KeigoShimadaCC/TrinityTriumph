@@ -45,7 +45,12 @@ export const FieldArea = () => {
         return;
       }
       const tile = getTileAt(next.x, next.y);
-      movePlayer(next.x - playerPos.x, next.y - playerPos.y, isPassable(tile));
+      movePlayer(
+        next.x - playerPos.x,
+        next.y - playerPos.y,
+        isPassable(tile),
+        tile
+      );
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
@@ -100,10 +105,10 @@ export const FieldArea = () => {
                   movePlayer(0, 0, false);
                   return;
                 }
-                const tile = getTileAt(next.x, next.y);
-                movePlayer(0, -1, isPassable(tile));
-              }}
-            >
+              const tile = getTileAt(next.x, next.y);
+              movePlayer(0, -1, isPassable(tile), tile);
+            }}
+          >
               UP
             </button>
             <button
@@ -115,10 +120,10 @@ export const FieldArea = () => {
                   movePlayer(0, 0, false);
                   return;
                 }
-                const tile = getTileAt(next.x, next.y);
-                movePlayer(-1, 0, isPassable(tile));
-              }}
-            >
+              const tile = getTileAt(next.x, next.y);
+              movePlayer(-1, 0, isPassable(tile), tile);
+            }}
+          >
               LT
             </button>
             <button
@@ -130,10 +135,10 @@ export const FieldArea = () => {
                   movePlayer(0, 0, false);
                   return;
                 }
-                const tile = getTileAt(next.x, next.y);
-                movePlayer(1, 0, isPassable(tile));
-              }}
-            >
+              const tile = getTileAt(next.x, next.y);
+              movePlayer(1, 0, isPassable(tile), tile);
+            }}
+          >
               RT
             </button>
             <button
@@ -145,10 +150,10 @@ export const FieldArea = () => {
                   movePlayer(0, 0, false);
                   return;
                 }
-                const tile = getTileAt(next.x, next.y);
-                movePlayer(0, 1, isPassable(tile));
-              }}
-            >
+              const tile = getTileAt(next.x, next.y);
+              movePlayer(0, 1, isPassable(tile), tile);
+            }}
+          >
               DN
             </button>
           </div>

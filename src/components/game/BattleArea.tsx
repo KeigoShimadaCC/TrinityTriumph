@@ -20,9 +20,9 @@ import scissorsIcon from "../../assets/sprites/moves/scissors.svg";
 import paperIcon from "../../assets/sprites/moves/paper.svg";
 
 const moveLabels: Record<MoveType, string> = {
-  rock: "GU",
-  scissors: "CHOKI",
-  paper: "PA"
+  rock: "SWORD",
+  scissors: "MAGIC",
+  paper: "PRAYER"
 };
 
 const moveColors: Record<MoveType, string> = {

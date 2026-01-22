@@ -8,6 +8,10 @@ import { enemies } from "../../data/enemies";
 export const StatusHud = () => {
   const {
     playerHP,
+    playerMaxHP,
+    playerLevel,
+    playerExp,
+    playerExpToNext,
     enemyHP,
     burst,
     burstArmed,
@@ -25,6 +29,9 @@ export const StatusHud = () => {
   const enemyMax = enemy?.baseHP ?? 100;
   const enemyValue = (enemyHP / enemyMax) * 100;
   const enemyDelayedValue = (enemyDelayed / enemyMax) * 100;
+  const playerValue = (playerHP / playerMaxHP) * 100;
+  const playerDelayedValue = (playerDelayed / playerMaxHP) * 100;
+  const expValue = (playerExp / playerExpToNext) * 100;
 
   useEffect(() => {
     const timeout = setTimeout(() => setPlayerDelayed(playerHP), 200);
@@ -87,12 +94,18 @@ export const StatusHud = () => {
             {burst >= 100 ? "ARM BURST" : "BURST LOCK"}
           </Button>
         </div>
-        {renderHpBar(playerHP, playerDelayed, colors.rock)}
+        {renderHpBar(playerValue, playerDelayedValue, colors.rock)}
         <ProgressBar
           value={burst}
           color={colors.paper}
           label="Burst Gauge"
           className="mt-3"
+        />
+        <ProgressBar
+          value={expValue}
+          color={colors.scissors}
+          label={`Level ${playerLevel}`}
+          className="mt-2"
         />
         {equippedItemIds.length > 0 ? (
           <div className="mt-2 text-[8px] text-[#3a4a2a]">

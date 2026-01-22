@@ -30,6 +30,7 @@ export interface Enemy {
   color: string;
   anima: string;
   baseHP: number;
+  exp: number;
   difficulty: Difficulty;
   storyTag: StoryTag;
   blurb: string;
@@ -49,6 +50,12 @@ export interface GameState {
   mode: Mode;
   phase: Phase;
   playerHP: number;
+  playerMaxHP: number;
+  playerLevel: number;
+  playerExp: number;
+  playerExpToNext: number;
+  playerBonusAttack: ElementStats;
+  playerBonusDefense: ElementStats;
   enemyHP: number;
   enemyIndex: number;
   playerPos: { x: number; y: number };
@@ -64,7 +71,7 @@ export interface GameState {
   message: string;
   chooseMove: (move: MoveType) => void;
   toggleBurst: () => void;
-  movePlayer: (dx: number, dy: number, canMove: boolean) => void;
+  movePlayer: (dx: number, dy: number, canMove: boolean, tile?: string) => void;
   returnToField: () => void;
   toggleEquipItem: (itemId: string) => void;
   reset: () => void;

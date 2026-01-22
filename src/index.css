@@ -168,6 +168,18 @@ body {
   clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
+.tile-h {
+  background: #86c6b5;
+  position: relative;
+}
+
+.tile-h::after {
+  content: "+";
+  position: absolute;
+  color: #2b3a1f;
+  font-size: 10px;
+}
+
 .field-footer {
   display: flex;
   justify-content: space-between;

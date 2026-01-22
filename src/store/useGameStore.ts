@@ -93,7 +93,11 @@ const sumStats = (
 const getEquippedItems = (equippedIds: string[]) =>
   items.filter((item) => equippedIds.includes(item.id));
 
-const getPlayerStats = (equippedIds: string[]) => {
+const getPlayerStats = (
+  equippedIds: string[],
+  bonusAttack: Record<MoveType, number>,
+  bonusDefense: Record<MoveType, number>
+) => {
   const equipped = getEquippedItems(equippedIds);
   const attackBonus = equipped.reduce<Partial<Record<MoveType, number>>>(
     (acc, item) => ({
@@ -112,8 +116,8 @@ const getPlayerStats = (equippedIds: string[]) => {
     {}
   );
   return {
-    attack: sumStats(basePlayerAttack, attackBonus),
-    defense: sumStats(basePlayerDefense, defenseBonus)
+    attack: sumStats(sumStats(basePlayerAttack, bonusAttack), attackBonus),
+    defense: sumStats(sumStats(basePlayerDefense, bonusDefense), defenseBonus)
   };
 };
 
@@ -137,6 +141,12 @@ export const useGameStore = create<GameState>((set, get) => ({
   mode: "field",
   phase: "command",
   playerHP: 100,
+  playerMaxHP: 100,
+  playerLevel: 1,
+  playerExp: 0,
+  playerExpToNext: 100,
+  playerBonusAttack: { rock: 0, scissors: 0, paper: 0 },
+  playerBonusDefense: { rock: 0, scissors: 0, paper: 0 },
   enemyHP: getEnemy(0).baseHP,
   enemyIndex: 0,
   playerPos: { x: 4, y: 4 },
@@ -171,7 +181,11 @@ export const useGameStore = create<GameState>((set, get) => ({
       const nextState = get();
       const currentEnemy = getEnemy(nextState.enemyIndex);
       const currentTuning = difficultyTuning[currentEnemy.difficulty];
-      const playerStats = getPlayerStats(nextState.equippedItemIds);
+      const playerStats = getPlayerStats(
+        nextState.equippedItemIds,
+        nextState.playerBonusAttack,
+        nextState.playerBonusDefense
+      );
       let playerHP = nextState.playerHP;
       let enemyHP = nextState.enemyHP;
       let burst = nextState.burst;
@@ -211,7 +225,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         playerHP = clamp(
           playerHP - modifiedDamage,
           0,
-          100
+          nextState.playerMaxHP
         );
         burst = clamp(burst + currentTuning.burstLose, 0, 100);
         message = "Impact taken.";
@@ -230,21 +244,55 @@ export const useGameStore = create<GameState>((set, get) => ({
           playerAttack,
           enemyDefense
         );
-        playerHP = clamp(playerHP - playerDamage, 0, 100);
+        playerHP = clamp(playerHP - playerDamage, 0, nextState.playerMaxHP);
         enemyHP = clamp(enemyHP - enemyDamage, 0, currentEnemy.baseHP);
         burst = clamp(burst + currentTuning.burstDraw, 0, 100);
         message = "PARRY!";
       }
 
+      let playerLevel = nextState.playerLevel;
+      let playerExp = nextState.playerExp;
+      let playerExpToNext = nextState.playerExpToNext;
+      let playerMaxHP = nextState.playerMaxHP;
+      let playerBonusAttack = nextState.playerBonusAttack;
+      let playerBonusDefense = nextState.playerBonusDefense;
+
+      if (enemyHP === 0) {
+        playerExp += currentEnemy.exp;
+        while (playerExp >= playerExpToNext) {
+          playerExp -= playerExpToNext;
+          playerLevel += 1;
+          playerExpToNext = Math.round(playerExpToNext * 1.35);
+          playerMaxHP += 6;
+          playerBonusAttack = {
+            rock: playerBonusAttack.rock + 1,
+            scissors: playerBonusAttack.scissors + 1,
+            paper: playerBonusAttack.paper + 1
+          };
+          playerBonusDefense = {
+            rock: playerBonusDefense.rock + 1,
+            scissors: playerBonusDefense.scissors + 1,
+            paper: playerBonusDefense.paper + 1
+          };
+          playerHP = clamp(playerHP + 6, 0, playerMaxHP);
+        }
+      }
+
       set({
         phase: "result",
         playerHP,
+        playerMaxHP,
+        playerLevel,
+        playerExp,
+        playerExpToNext,
+        playerBonusAttack,
+        playerBonusDefense,
         enemyHP,
         burst,
         burstArmed,
         burstUsed,
         lastOutcome: outcome,
-        message,
+        message: enemyHP === 0 ? `${message} +${currentEnemy.exp} EXP` : message,
         telegraph: pickTelegraph()
       });
 
@@ -284,7 +332,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (state.mode !== "battle" || state.burst < 100) return;
     set({ burstArmed: !state.burstArmed });
   },
-  movePlayer: (dx, dy, canMove) => {
+  movePlayer: (dx, dy, canMove, tile) => {
     const state = get();
     if (state.mode !== "field") return;
     if (!canMove) {
@@ -323,6 +371,16 @@ export const useGameStore = create<GameState>((set, get) => ({
         telegraph: pickTelegraph(),
         message: `Encountered ${enemy.name}!`,
         playerPos: { x: nextX, y: nextY }
+      });
+      return;
+    }
+
+    if (tile === "H") {
+      const healed = clamp(state.playerHP + 12, 0, state.playerMaxHP);
+      set({
+        playerPos: { x: nextX, y: nextY },
+        playerHP: healed,
+        message: "Healed at spring."
       });
       return;
     }
@@ -372,6 +430,12 @@ export const useGameStore = create<GameState>((set, get) => ({
       mode: "field",
       phase: "command",
       playerHP: 100,
+      playerMaxHP: 100,
+      playerLevel: 1,
+      playerExp: 0,
+      playerExpToNext: 100,
+      playerBonusAttack: { rock: 0, scissors: 0, paper: 0 },
+      playerBonusDefense: { rock: 0, scissors: 0, paper: 0 },
       enemyHP: getEnemy(0).baseHP,
       enemyIndex: 0,
       playerPos: { x: 4, y: 4 },
