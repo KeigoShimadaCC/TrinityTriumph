@@ -22,8 +22,8 @@ body,
 
 #root {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
 }
 
 :root {
@@ -50,6 +50,17 @@ body {
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: none;
   font-smooth: never;
+}
+
+.admin-toggle {
+  margin-top: 6px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-toggle input {
+  margin-left: 6px;
 }
 
 .pixel-viewport {
@@ -233,6 +244,54 @@ body {
   content: "E";
   position: absolute;
   color: #d5e7b6;
+  font-size: 9px;
+}
+
+.tile-n {
+  background: #2f7a3e;
+  position: relative;
+}
+
+.tile-n::after {
+  content: "F";
+  position: absolute;
+  color: #d5e7b6;
+  font-size: 9px;
+}
+
+.tile-u {
+  background: #3c5f6b;
+  position: relative;
+}
+
+.tile-u::after {
+  content: "H";
+  position: absolute;
+  color: #d5e7b6;
+  font-size: 9px;
+}
+
+.tile-d {
+  background: #4a3f4a;
+  position: relative;
+}
+
+.tile-d::after {
+  content: "R";
+  position: absolute;
+  color: #d5e7b6;
+  font-size: 9px;
+}
+
+.tile-c {
+  background: #2f4f2e;
+  position: relative;
+}
+
+.tile-c::after {
+  content: "▲";
+  position: absolute;
+  color: #1e321d;
   font-size: 9px;
 }
 

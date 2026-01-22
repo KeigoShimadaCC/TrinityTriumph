@@ -3,7 +3,7 @@ export interface Npc {
   name: string;
   x: number;
   y: number;
-  map: "town";
+  map: "town" | "forest" | "harbor" | "ruins";
   sprite: string;
   lines: string[];
 }
@@ -12,17 +12,24 @@ import npcMage from "../assets/sprites/npc-mage.svg";
 import npcSmith from "../assets/sprites/npc-smith.svg";
 import npcSage from "../assets/sprites/npc-sage.svg";
 import npcMerchant from "../assets/sprites/npc-merchant.svg";
+import npcGuard from "../assets/sprites/npc-guard.svg";
+import npcInnkeeper from "../assets/sprites/npc-innkeeper.svg";
+import npcChild from "../assets/sprites/npc-child.svg";
+import npcHunter from "../assets/sprites/npc-hunter.svg";
+import npcElf from "../assets/sprites/npc-elf.svg";
+import npcSailor from "../assets/sprites/npc-sailor.svg";
+import npcCultist from "../assets/sprites/npc-cultist.svg";
 
 export const npcs: Npc[] = [
   {
     id: "town-mage",
     name: "Eldra",
-    x: 8,
+    x: 7,
     y: 3,
     map: "town",
     sprite: npcMage,
     lines: [
-      "Magic bends to timing. Read the telegraph.",
+      "The blight stirs in the old ruins to the east.",
       "Sword beats prayer, prayer beats magic, magic beats sword."
     ]
   },
@@ -35,19 +42,19 @@ export const npcs: Npc[] = [
     sprite: npcSmith,
     lines: [
       "Equip gear in the field. It boosts your element stats.",
-      "A sharp blade is only half the battle."
+      "Roads lead to the harbor and the hidden glade."
     ]
   },
   {
     id: "town-sage",
     name: "Sora",
-    x: 12,
+    x: 13,
     y: 3,
     map: "town",
     sprite: npcSage,
     lines: [
       "Healing springs restore you. Seek the blue + tiles.",
-      "Leveling raises HP and all element power."
+      "The forest gate is concealed in the northern grass."
     ]
   },
   {
@@ -59,7 +66,91 @@ export const npcs: Npc[] = [
     sprite: npcMerchant,
     lines: [
       "Defeat each foe once to clear the land.",
-      "Burst shines when you win at the perfect moment."
+      "The farther you roam, the stronger they grow."
+    ]
+  },
+  {
+    id: "town-guard",
+    name: "Rook",
+    x: 14,
+    y: 4,
+    map: "town",
+    sprite: npcGuard,
+    lines: [
+      "Keep your weapon ready. The wilds are restless.",
+      "The harbor to the south is still safe."
+    ]
+  },
+  {
+    id: "town-innkeeper",
+    name: "Mara",
+    x: 12,
+    y: 7,
+    map: "town",
+    sprite: npcInnkeeper,
+    lines: [
+      "Rest here before you head into the dark.",
+      "Rumor says the ruins breathe at night."
+    ]
+  },
+  {
+    id: "town-child",
+    name: "Pip",
+    x: 8,
+    y: 7,
+    map: "town",
+    sprite: npcChild,
+    lines: [
+      "I saw lights in the forest!",
+      "Mom says don't go past the river."
+    ]
+  },
+  {
+    id: "town-hunter",
+    name: "Ilen",
+    x: 16,
+    y: 6,
+    map: "town",
+    sprite: npcHunter,
+    lines: [
+      "Tracks point toward the old road east.",
+      "Elves guard their glade. Tread lightly."
+    ]
+  },
+  {
+    id: "forest-elf",
+    name: "Liora",
+    x: 13,
+    y: 7,
+    map: "forest",
+    sprite: npcElf,
+    lines: [
+      "This grove remembers before the blight.",
+      "We watch the gate for those with pure intent."
+    ]
+  },
+  {
+    id: "harbor-sailor",
+    name: "Jax",
+    x: 10,
+    y: 8,
+    map: "harbor",
+    sprite: npcSailor,
+    lines: [
+      "Storms off the coast grow worse each week.",
+      "Supplies still make it through, barely."
+    ]
+  },
+  {
+    id: "ruins-cultist",
+    name: "Ashen One",
+    x: 12,
+    y: 8,
+    map: "ruins",
+    sprite: npcCultist,
+    lines: [
+      "The old king sleeps beneath broken stone.",
+      "Turn back. The dark does not forget."
     ]
   }
 ];

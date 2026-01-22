@@ -8,7 +8,8 @@ import { useGameStore } from "./store/useGameStore";
 import { useSound } from "./hooks/useSound";
 
 const App = () => {
-  const { lastOutcome, burstUsed, mode } = useGameStore();
+  const { lastOutcome, burstUsed, mode, encountersEnabled, setEncountersEnabled } =
+    useGameStore();
   const [shake, setShake] = useState(false);
   const playSound = useSound();
 
@@ -30,6 +31,17 @@ const App = () => {
   }, [burstUsed, lastOutcome, playSound]);
 
   return (
+    <>
+    <div className="admin-toggle">
+      <label className="pixel-text text-[9px]">
+        Encounters
+        <input
+          type="checkbox"
+          checked={encountersEnabled}
+          onChange={(event) => setEncountersEnabled(event.target.checked)}
+        />
+      </label>
+    </div>
     <div className="pixel-viewport">
       <div className="pixel-scale">
         <Screen className={shake ? "animate-shake" : ""}>
@@ -55,6 +67,7 @@ const App = () => {
         </Screen>
       </div>
     </div>
+    </>
   );
 };
 

@@ -5,7 +5,15 @@ import { clamp, pickWeighted } from "../utils/rng";
 import { enemies } from "../data/enemies";
 import { items } from "../data/items";
 import { playerCharacter } from "../data/characters";
-import { fieldMap, townMap, worldHeight, worldWidth } from "../data/worldMap";
+import {
+  fieldMap,
+  forestMap,
+  harborMap,
+  ruinsMap,
+  townMap,
+  worldHeight,
+  worldWidth
+} from "../data/worldMap";
 
 const allMoves: MoveType[] = ["rock", "scissors", "paper"];
 
@@ -137,6 +145,28 @@ const pickEncounterEnemy = (defeated: string[]) => {
   return choice ?? null;
 };
 
+const spawnPoint = { x: 4, y: 4 };
+
+const getDistanceScale = (pos: { x: number; y: number }) => {
+  const distance = Math.hypot(pos.x - spawnPoint.x, pos.y - spawnPoint.y);
+  const factor = Math.min(distance / 14, 2);
+  return 1 + factor * 0.2;
+};
+
+const scaleEnemyStats = (enemy: (typeof enemies)[number], scale: number) => ({
+  baseHP: Math.round(enemy.baseHP * scale),
+  attack: {
+    rock: Math.round(enemy.attack.rock * scale),
+    scissors: Math.round(enemy.attack.scissors * scale),
+    paper: Math.round(enemy.attack.paper * scale)
+  },
+  defense: {
+    rock: Math.round(enemy.defense.rock * scale),
+    scissors: Math.round(enemy.defense.scissors * scale),
+    paper: Math.round(enemy.defense.paper * scale)
+  }
+});
+
 export const useGameStore = create<GameState>((set, get) => ({
   mode: "field",
   world: "field",
@@ -149,10 +179,14 @@ export const useGameStore = create<GameState>((set, get) => ({
   playerBonusAttack: { rock: 0, scissors: 0, paper: 0 },
   playerBonusDefense: { rock: 0, scissors: 0, paper: 0 },
   enemyHP: getEnemy(0).baseHP,
+  enemyMaxHP: getEnemy(0).baseHP,
+  enemyScale: 1,
   enemyIndex: 0,
-  playerPos: { x: 4, y: 4 },
+  playerPos: { x: spawnPoint.x, y: spawnPoint.y },
+  fieldReturnPos: { x: spawnPoint.x, y: spawnPoint.y },
   defeatedEnemyIds: [],
   equippedItemIds: [],
+  encountersEnabled: true,
   burst: 0,
   burstArmed: false,
   burstUsed: false,
@@ -181,6 +215,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       const outcome = compareMoves(move, enemyMove);
       const nextState = get();
       const currentEnemy = getEnemy(nextState.enemyIndex);
+      const scaledEnemy = scaleEnemyStats(currentEnemy, nextState.enemyScale);
       const currentTuning = difficultyTuning[currentEnemy.difficulty];
       const playerStats = getPlayerStats(
         nextState.equippedItemIds,
@@ -197,7 +232,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       if (outcome === "win") {
         const bonus = burstArmed ? 12 : 0;
         const playerAttack = playerStats.attack[move];
-        const enemyDefense = currentEnemy.defense[move];
+        const enemyDefense = scaledEnemy.defense[move];
         const modifiedDamage = applyElementModifier(
           currentTuning.damageToEnemy + bonus,
           playerAttack,
@@ -206,7 +241,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         enemyHP = clamp(
           enemyHP - modifiedDamage,
           0,
-          currentEnemy.baseHP
+          nextState.enemyMaxHP
         );
         burst = clamp(burst + currentTuning.burstWin, 0, 100);
         message = bonus ? "TRINITY BURST!" : "Direct hit!";
@@ -216,7 +251,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           burstUsed = true;
         }
       } else if (outcome === "lose") {
-        const enemyAttack = currentEnemy.attack[enemyMove];
+        const enemyAttack = scaledEnemy.attack[enemyMove];
         const playerDefense = playerStats.defense[enemyMove];
         const modifiedDamage = applyElementModifier(
           currentTuning.damageToPlayer,
@@ -232,8 +267,8 @@ export const useGameStore = create<GameState>((set, get) => ({
         message = "Impact taken.";
       } else {
         const playerAttack = playerStats.attack[move];
-        const enemyDefense = currentEnemy.defense[move];
-        const enemyAttack = currentEnemy.attack[enemyMove];
+        const enemyDefense = scaledEnemy.defense[move];
+        const enemyAttack = scaledEnemy.attack[enemyMove];
         const playerDefense = playerStats.defense[enemyMove];
         const playerDamage = applyElementModifier(
           currentTuning.drawDamage,
@@ -246,7 +281,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           enemyDefense
         );
         playerHP = clamp(playerHP - playerDamage, 0, nextState.playerMaxHP);
-        enemyHP = clamp(enemyHP - enemyDamage, 0, currentEnemy.baseHP);
+        enemyHP = clamp(enemyHP - enemyDamage, 0, nextState.enemyMaxHP);
         burst = clamp(burst + currentTuning.burstDraw, 0, 100);
         message = "PARRY!";
       }
@@ -348,16 +383,47 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (tile === "T" && state.world === "field") {
       set({
         world: "town",
-        playerPos: { x: 10, y: 8 },
+        playerPos: { x: 11, y: 9 },
+        fieldReturnPos: { x: nextX, y: nextY },
         message: "Entered town."
       });
       return;
     }
 
-    if (tile === "E" && state.world === "town") {
+    if (tile === "N" && state.world === "field") {
+      set({
+        world: "forest",
+        playerPos: { x: 14, y: 10 },
+        fieldReturnPos: { x: nextX, y: nextY },
+        message: "Entered forest glade."
+      });
+      return;
+    }
+
+    if (tile === "U" && state.world === "field") {
+      set({
+        world: "harbor",
+        playerPos: { x: 12, y: 8 },
+        fieldReturnPos: { x: nextX, y: nextY },
+        message: "Arrived at the harbor."
+      });
+      return;
+    }
+
+    if (tile === "D" && state.world === "field") {
+      set({
+        world: "ruins",
+        playerPos: { x: 12, y: 9 },
+        fieldReturnPos: { x: nextX, y: nextY },
+        message: "Entered the dark ruins."
+      });
+      return;
+    }
+
+    if (tile === "E" && state.world !== "field") {
       set({
         world: "field",
-        playerPos: { x: 4, y: 4 },
+        playerPos: { x: state.fieldReturnPos.x, y: state.fieldReturnPos.y },
         message: "Returned to field."
       });
       return;
@@ -366,7 +432,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     const encounterChance = 0.22;
     const hasEnemies = getAvailableEnemyIndices(state.defeatedEnemyIds).length > 0;
     const shouldEncounter =
-      state.world === "field" && hasEnemies && Math.random() < encounterChance;
+      state.world === "field" &&
+      state.encountersEnabled &&
+      hasEnemies &&
+      Math.random() < encounterChance;
     if (shouldEncounter) {
       const enemyIndex = pickEncounterEnemy(state.defeatedEnemyIds);
       const enemy = enemyIndex !== null ? getEnemy(enemyIndex) : null;
@@ -377,11 +446,15 @@ export const useGameStore = create<GameState>((set, get) => ({
         });
         return;
       }
+      const enemyScale = getDistanceScale({ x: nextX, y: nextY });
+      const scaledEnemy = scaleEnemyStats(enemy, enemyScale);
       set({
         mode: "battle",
         phase: "command",
         enemyIndex,
-        enemyHP: enemy.baseHP,
+        enemyHP: scaledEnemy.baseHP,
+        enemyMaxHP: scaledEnemy.baseHP,
+        enemyScale,
         playerMove: null,
         enemyMove: null,
         lastOutcome: null,
@@ -425,6 +498,9 @@ export const useGameStore = create<GameState>((set, get) => ({
       message: "Back to the field."
     });
   },
+  setEncountersEnabled: (enabled) => {
+    set({ encountersEnabled: enabled });
+  },
   toggleEquipItem: (itemId) => {
     const state = get();
     if (state.mode !== "field") return;
@@ -457,10 +533,14 @@ export const useGameStore = create<GameState>((set, get) => ({
       playerBonusAttack: { rock: 0, scissors: 0, paper: 0 },
       playerBonusDefense: { rock: 0, scissors: 0, paper: 0 },
       enemyHP: getEnemy(0).baseHP,
+      enemyMaxHP: getEnemy(0).baseHP,
+      enemyScale: 1,
       enemyIndex: 0,
-      playerPos: { x: 4, y: 4 },
+      playerPos: { x: spawnPoint.x, y: spawnPoint.y },
+      fieldReturnPos: { x: spawnPoint.x, y: spawnPoint.y },
       world: "field",
       defeatedEnemyIds: [],
+      encountersEnabled: true,
       equippedItemIds: [],
       burst: 0,
       burstArmed: false,

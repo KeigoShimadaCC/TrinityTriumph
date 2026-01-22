@@ -4,6 +4,9 @@ import leoSprite from "../../assets/sprites/leo.svg";
 import { items } from "../../data/items";
 import {
   fieldMap,
+  forestMap,
+  harborMap,
+  ruinsMap,
   townMap,
   getTileAt,
   isPassable,
@@ -18,7 +21,16 @@ const viewRadius = Math.floor(viewSize / 2);
 export const FieldArea = () => {
   const { playerPos, movePlayer, message, equippedItemIds, toggleEquipItem, world } =
     useGameStore();
-  const activeMap = world === "town" ? townMap : fieldMap;
+  const activeMap =
+    world === "town"
+      ? townMap
+      : world === "forest"
+      ? forestMap
+      : world === "harbor"
+      ? harborMap
+      : world === "ruins"
+      ? ruinsMap
+      : fieldMap;
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
@@ -81,7 +93,15 @@ export const FieldArea = () => {
   return (
     <div className="glass field-wrap">
       <div className="field-header pixel-text text-[9px] text-[#3a4a2a]">
-        {world === "town" ? "Town Square" : "Grass Field"}
+        {world === "town"
+          ? "Town Square"
+          : world === "forest"
+          ? "Hidden Glade"
+          : world === "harbor"
+          ? "Harbor"
+          : world === "ruins"
+          ? "Dark Ruins"
+          : "Grass Field"}
       </div>
       <div className="field-map" style={{ gridTemplateColumns: `repeat(${viewSize}, 1fr)` }}>
         {cells.map((_, index) => {

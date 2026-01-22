@@ -26,12 +26,21 @@ const renderRow = (label: string, value: number, delayed: number, color: string)
 );
 
 export const EnemyHud = () => {
-  const { enemyHP, telegraph, enemyIndex } = useGameStore();
+  const { enemyHP, enemyMaxHP, enemyScale, telegraph, enemyIndex } = useGameStore();
   const enemy = enemies[Math.min(enemyIndex, enemies.length - 1)];
   const [enemyDelayed, setEnemyDelayed] = useState(enemyHP);
-  const enemyMax = enemy?.baseHP ?? 100;
-  const enemyValue = (enemyHP / enemyMax) * 100;
-  const enemyDelayedValue = (enemyDelayed / enemyMax) * 100;
+  const enemyValue = (enemyHP / enemyMaxHP) * 100;
+  const enemyDelayedValue = (enemyDelayed / enemyMaxHP) * 100;
+  const scaledAttack = {
+    rock: Math.round(enemy.attack.rock * enemyScale),
+    scissors: Math.round(enemy.attack.scissors * enemyScale),
+    paper: Math.round(enemy.attack.paper * enemyScale)
+  };
+  const scaledDefense = {
+    rock: Math.round(enemy.defense.rock * enemyScale),
+    scissors: Math.round(enemy.defense.scissors * enemyScale),
+    paper: Math.round(enemy.defense.paper * enemyScale)
+  };
 
   useEffect(() => {
     const timeout = setTimeout(() => setEnemyDelayed(enemyHP), 200);
@@ -58,8 +67,8 @@ export const EnemyHud = () => {
         <p className="mb-1 text-[9px] text-[#3a4a2a]">{enemy.blurb}</p>
       ) : null}
       <div className="mb-1 text-[8px] text-[#3a4a2a]">
-        ATK {enemy.attack.rock}/{enemy.attack.scissors}/{enemy.attack.paper} | DEF{" "}
-        {enemy.defense.rock}/{enemy.defense.scissors}/{enemy.defense.paper}
+        ATK {scaledAttack.rock}/{scaledAttack.scissors}/{scaledAttack.paper} | DEF{" "}
+        {scaledDefense.rock}/{scaledDefense.scissors}/{scaledDefense.paper}
       </div>
       {renderRow("ENEMY HP", enemyValue, enemyDelayedValue, colors.scissors)}
     </div>

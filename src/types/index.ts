@@ -48,7 +48,7 @@ export interface Item {
 
 export interface GameState {
   mode: Mode;
-  world: "field" | "town";
+  world: "field" | "town" | "forest" | "harbor" | "ruins";
   phase: Phase;
   playerHP: number;
   playerMaxHP: number;
@@ -58,10 +58,14 @@ export interface GameState {
   playerBonusAttack: ElementStats;
   playerBonusDefense: ElementStats;
   enemyHP: number;
+  enemyMaxHP: number;
+  enemyScale: number;
   enemyIndex: number;
   playerPos: { x: number; y: number };
+  fieldReturnPos: { x: number; y: number };
   defeatedEnemyIds: string[];
   equippedItemIds: string[];
+  encountersEnabled: boolean;
   burst: number;
   burstArmed: boolean;
   burstUsed: boolean;
@@ -81,5 +85,6 @@ export interface GameState {
   ) => void;
   returnToField: () => void;
   toggleEquipItem: (itemId: string) => void;
+  setEncountersEnabled: (enabled: boolean) => void;
   reset: () => void;
 }
