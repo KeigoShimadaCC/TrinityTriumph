@@ -195,6 +195,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   defeatedEnemyIds: [],
   equippedItemIds: [],
   encountersEnabled: true,
+  keyItems: [],
+  eventFlags: {},
   burst: 0,
   burstArmed: false,
   burstUsed: false,
@@ -408,6 +410,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
 
     if (tile === "N" && state.world === "field") {
+      if (!state.keyItems.includes("forestSigil")) {
+        set({ message: "The forest gate rejects you." });
+        return;
+      }
       const visitedWorlds = { ...state.visitedWorlds, forest: true };
       const storyStage = state.storyStage < 2 ? 2 : state.storyStage;
       const storyQuest =
@@ -541,6 +547,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
 
     if (tile === "Q") {
+      if (!state.keyItems.includes("ruinsSeal")) {
+        set({ message: "The ruins gate is sealed." });
+        return;
+      }
       set({
         playerPos: { x: nextX, y: nextY },
         burst: clamp(state.burst + 10, 0, 100),
@@ -550,6 +560,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
 
     if (tile === "P") {
+      if (!state.keyItems.includes("harborPass")) {
+        set({ message: "A guard blocks the bridge." });
+        return;
+      }
       set({
         playerPos: { x: nextX, y: nextY },
         message: "Crossed the bridge."
@@ -579,6 +593,16 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
   setEncountersEnabled: (enabled) => {
     set({ encountersEnabled: enabled });
+  },
+  setKeyItem: (itemId) => {
+    const state = get();
+    if (state.keyItems.includes(itemId)) return;
+    set({ keyItems: [...state.keyItems, itemId] });
+  },
+  setEventFlag: (flag) => {
+    const state = get();
+    if (state.eventFlags[flag]) return;
+    set({ eventFlags: { ...state.eventFlags, [flag]: true } });
   },
   toggleEquipItem: (itemId) => {
     const state = get();
@@ -628,6 +652,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       world: "field",
       defeatedEnemyIds: [],
       encountersEnabled: true,
+      keyItems: [],
+      eventFlags: {},
       equippedItemIds: [],
       burst: 0,
       burstArmed: false,

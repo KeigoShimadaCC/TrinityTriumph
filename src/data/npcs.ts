@@ -6,6 +6,9 @@ export interface Npc {
   map: "town" | "forest" | "harbor" | "ruins";
   sprite: string;
   lines: string[];
+  important?: boolean;
+  giveItemId?: string;
+  flag?: string;
 }
 
 import npcMage from "../assets/sprites/npc-mage.svg";
@@ -19,6 +22,9 @@ import npcHunter from "../assets/sprites/npc-hunter.svg";
 import npcElf from "../assets/sprites/npc-elf.svg";
 import npcSailor from "../assets/sprites/npc-sailor.svg";
 import npcCultist from "../assets/sprites/npc-cultist.svg";
+import npcArchmage from "../assets/sprites/npc-archmage.svg";
+import npcWarden from "../assets/sprites/npc-warden.svg";
+import npcCaptain from "../assets/sprites/npc-captain.svg";
 
 export const npcs: Npc[] = [
   {
@@ -31,6 +37,21 @@ export const npcs: Npc[] = [
     lines: [
       "The blight stirs in the old ruins to the east.",
       "Sword beats prayer, prayer beats magic, magic beats sword."
+    ]
+  },
+  {
+    id: "town-archmage",
+    name: "Archmage Selene",
+    x: 11,
+    y: 2,
+    map: "town",
+    sprite: npcArchmage,
+    important: true,
+    giveItemId: "forestSigil",
+    flag: "gotForestSigil",
+    lines: [
+      "You seek the glade? Take this sigil.",
+      "The forest gate will answer to its mark."
     ]
   },
   {
@@ -130,6 +151,21 @@ export const npcs: Npc[] = [
     ]
   },
   {
+    id: "forest-warden",
+    name: "Warden Ael",
+    x: 16,
+    y: 11,
+    map: "forest",
+    sprite: npcWarden,
+    important: true,
+    giveItemId: "harborPass",
+    flag: "gotHarborPass",
+    lines: [
+      "Our paths cross. Take this pass for the bridge.",
+      "The harbor's captain will be waiting."
+    ]
+  },
+  {
     id: "harbor-sailor",
     name: "Jax",
     x: 10,
@@ -139,6 +175,21 @@ export const npcs: Npc[] = [
     lines: [
       "Storms off the coast grow worse each week.",
       "Supplies still make it through, barely."
+    ]
+  },
+  {
+    id: "harbor-captain",
+    name: "Captain Brine",
+    x: 12,
+    y: 7,
+    map: "harbor",
+    sprite: npcCaptain,
+    important: true,
+    giveItemId: "ruinsSeal",
+    flag: "gotRuinsSeal",
+    lines: [
+      "Take this seal. It breaks the ruin gate lock.",
+      "End the blight for us all."
     ]
   },
   {

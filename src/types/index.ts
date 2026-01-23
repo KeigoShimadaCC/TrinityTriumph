@@ -65,6 +65,8 @@ export interface GameState {
     harbor: boolean;
     ruins: boolean;
   };
+  keyItems: string[];
+  eventFlags: Record<string, boolean>;
   enemyHP: number;
   enemyMaxHP: number;
   enemyScale: number;
@@ -94,5 +96,7 @@ export interface GameState {
   returnToField: () => void;
   toggleEquipItem: (itemId: string) => void;
   setEncountersEnabled: (enabled: boolean) => void;
+  setKeyItem: (itemId: string) => void;
+  setEventFlag: (flag: string) => void;
   reset: () => void;
 }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import leoSprite from "../../assets/sprites/leo.svg";
 import { items } from "../../data/items";
+import { keyItems } from "../../data/keyItems";
 import { playerCharacter } from "../../data/characters";
 import {
   fieldMap,
@@ -31,7 +32,11 @@ export const FieldArea = () => {
     playerHP,
     playerMaxHP,
     playerBonusAttack,
-    playerBonusDefense
+    playerBonusDefense,
+    keyItems: playerKeyItems,
+    eventFlags,
+    setKeyItem,
+    setEventFlag
   } = useGameStore();
   const [activeMenu, setActiveMenu] = useState<"status" | "equip" | "items" | null>(
     null
@@ -133,6 +138,26 @@ export const FieldArea = () => {
     paper: baseDefense.paper + playerBonusDefense.paper + itemDefense.paper
   };
 
+  const handleNpcInteraction = (npcId: string, tile: string) => {
+    const npc = npcs.find((entry) => entry.id === npcId);
+    if (!npc) return;
+    const line = npc.lines[Math.floor(Math.random() * npc.lines.length)];
+    if (npc.giveItemId && !playerKeyItems.includes(npc.giveItemId)) {
+      setKeyItem(npc.giveItemId);
+      if (npc.flag) setEventFlag(npc.flag);
+      const itemName = keyItems.find((entry) => entry.id === npc.giveItemId)?.name;
+      movePlayer(
+        0,
+        0,
+        false,
+        tile,
+        `${npc.name}: ${line} Received ${itemName ?? npc.giveItemId}.`
+      );
+      return;
+    }
+    movePlayer(0, 0, false, tile, `${npc.name}: ${line}`);
+  };
+
   const stepMove = (dx: number, dy: number) => {
     const next = { x: playerPos.x + dx, y: playerPos.y + dy };
     if (next.x < 0 || next.y < 0 || next.x >= worldWidth || next.y >= worldHeight) {
@@ -144,8 +169,7 @@ export const FieldArea = () => {
       (npc) => npc.map === world && npc.x === next.x && npc.y === next.y
     );
     if (npcAtTarget) {
-      const line = npcAtTarget.lines[Math.floor(Math.random() * npcAtTarget.lines.length)];
-      movePlayer(0, 0, false, tile, `${npcAtTarget.name}: ${line}`);
+      handleNpcInteraction(npcAtTarget.id, tile);
       return;
     }
     movePlayer(dx, dy, isPassable(tile), tile);
@@ -348,9 +372,24 @@ export const FieldArea = () => {
             ) : null}
             {activeMenu === "items" ? (
               <div className="overlay-body">
-                <div className="pixel-text text-[8px] text-[#3a4a2a]">
-                  Bag is empty.
-                </div>
+                {playerKeyItems.length === 0 ? (
+                  <div className="pixel-text text-[8px] text-[#3a4a2a]">
+                    Bag is empty.
+                  </div>
+                ) : (
+                  <div className="equip-grid">
+                    {playerKeyItems.map((itemId) => {
+                      const item = keyItems.find((entry) => entry.id === itemId);
+                      if (!item) return null;
+                      return (
+                        <div key={item.id} className="equip-item equip-on">
+                          <span className="pixel-text text-[8px]">{item.name}</span>
+                          <span className="text-[8px]">{item.description}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             ) : null}
           </div>
