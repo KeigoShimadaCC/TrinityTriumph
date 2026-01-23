@@ -50,6 +50,12 @@ export const FieldArea = () => {
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if (event.repeat) return;
+      if (activeMenu) {
+        if (event.key === "q" || event.key === "Q") {
+          setActiveMenu(null);
+        }
+        return;
+      }
       switch (event.key) {
         case "ArrowUp":
           stepMove(0, -1);
@@ -75,6 +81,10 @@ export const FieldArea = () => {
         case "I":
           setActiveMenu("items");
           break;
+        case "q":
+        case "Q":
+          setActiveMenu(null);
+          break;
         default:
           break;
       }
@@ -87,7 +97,7 @@ export const FieldArea = () => {
       window.removeEventListener("pointerup", handlePointerUp);
       stopMoveLoop();
     };
-  }, [activeMap, movePlayer, playerPos.x, playerPos.y, world]);
+  }, [activeMap, activeMenu, movePlayer, playerPos.x, playerPos.y, world]);
 
   const cells = useMemo(() => Array.from({ length: viewSize * viewSize }), []);
   const originX = playerPos.x - viewRadius;
@@ -142,6 +152,7 @@ export const FieldArea = () => {
   };
 
   const startMoveLoop = (dx: number, dy: number) => {
+    if (activeMenu) return;
     stepMove(dx, dy);
     if (moveTimerRef.current) {
       window.clearInterval(moveTimerRef.current);

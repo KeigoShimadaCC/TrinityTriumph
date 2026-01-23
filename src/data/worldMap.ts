@@ -42,7 +42,6 @@ const createFieldMap = () => {
   map[4][5] = "T";
   map[6][18] = "N";
   map[18][28] = "U";
-  map[3][30] = "D";
 
   map[5][4] = "H";
   map[14][18] = "H";
@@ -54,7 +53,11 @@ const createFieldMap = () => {
   for (let y = 6; y <= 20; y += 1) {
     map[y][24] = "W";
   }
+  map[14][23] = "R";
   map[14][24] = "P";
+  map[14][25] = "R";
+  map[13][24] = "R";
+  map[15][24] = "R";
   map[10][24] = "P";
 
   for (let y = 2; y <= 7; y += 1) {
@@ -85,7 +88,7 @@ const createFieldMap = () => {
   }
   map[6][16] = "N";
   map[20][26] = "U";
-  map[4][30] = "D";
+  map[8][30] = "D";
   map[12][12] = "I";
   map[18][30] = "L";
 
@@ -160,6 +163,12 @@ const createForestMap = () => {
   map[7][14] = "R";
   map[8][14] = "R";
   map[9][14] = "R";
+  map[10][14] = "R";
+  map[11][14] = "R";
+  map[12][14] = "R";
+  map[13][14] = "R";
+  map[14][14] = "R";
+  map[15][14] = "R";
   map[12][18] = "H";
   map[15][14] = "E";
   return map;

@@ -522,6 +522,41 @@ export const useGameStore = create<GameState>((set, get) => ({
       return;
     }
 
+    if (tile === "I") {
+      set({
+        playerPos: { x: nextX, y: nextY },
+        playerHP: state.playerMaxHP,
+        message: "Rested at the inn."
+      });
+      return;
+    }
+
+    if (tile === "L") {
+      set({
+        playerPos: { x: nextX, y: nextY },
+        burst: clamp(state.burst + 15, 0, 100),
+        message: "The lighthouse steadies your resolve."
+      });
+      return;
+    }
+
+    if (tile === "Q") {
+      set({
+        playerPos: { x: nextX, y: nextY },
+        burst: clamp(state.burst + 10, 0, 100),
+        message: "The ruin gate whispers in the dark."
+      });
+      return;
+    }
+
+    if (tile === "P") {
+      set({
+        playerPos: { x: nextX, y: nextY },
+        message: "Crossed the bridge."
+      });
+      return;
+    }
+
     set({
       playerPos: { x: nextX, y: nextY },
       message: messageOverride ?? (hasEnemies ? "Exploring..." : "All foes cleared.")
