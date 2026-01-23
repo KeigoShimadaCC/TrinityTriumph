@@ -50,27 +50,30 @@ export const FieldArea = () => {
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if (event.repeat) return;
-      const next = { x: playerPos.x, y: playerPos.y };
       switch (event.key) {
         case "ArrowUp":
-        case "w":
-        case "W":
           stepMove(0, -1);
           break;
         case "ArrowDown":
-        case "s":
-        case "S":
           stepMove(0, 1);
           break;
         case "ArrowLeft":
-        case "a":
-        case "A":
           stepMove(-1, 0);
           break;
         case "ArrowRight":
-        case "d":
-        case "D":
           stepMove(1, 0);
+          break;
+        case "s":
+        case "S":
+          setActiveMenu("status");
+          break;
+        case "e":
+        case "E":
+          setActiveMenu("equip");
+          break;
+        case "i":
+        case "I":
+          setActiveMenu("items");
           break;
         default:
           break;

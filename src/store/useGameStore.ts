@@ -513,7 +513,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
 
     if (tile === "H") {
-      const healed = clamp(state.playerHP + 12, 0, state.playerMaxHP);
+      const healed = state.playerMaxHP;
       set({
         playerPos: { x: nextX, y: nextY },
         playerHP: healed,

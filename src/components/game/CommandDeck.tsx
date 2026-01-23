@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useGameStore } from "../../store/useGameStore";
 import { MoveType } from "../../types";
 import { Button } from "../ui/Button";
@@ -30,6 +31,34 @@ export const CommandDeck = () => {
   const isLocked = phase !== "command";
   const playSound = useSound();
   const burstLabel = burstArmed ? "BURST" : burst >= 100 ? "ARM" : "LOCK";
+
+  useEffect(() => {
+    const handleKey = (event: KeyboardEvent) => {
+      if (isLocked) return;
+      switch (event.key) {
+        case "ArrowUp":
+          playSound("select");
+          chooseMove("rock");
+          break;
+        case "ArrowLeft":
+          playSound("select");
+          chooseMove("scissors");
+          break;
+        case "ArrowRight":
+          playSound("select");
+          chooseMove("paper");
+          break;
+        case "ArrowDown":
+          playSound("select");
+          toggleBurst();
+          break;
+        default:
+          break;
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [chooseMove, isLocked, playSound, toggleBurst]);
 
   return (
     <div className="triforce-wrap">
